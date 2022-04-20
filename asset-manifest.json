@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/aviasales-test-task/static/css/main.7515bfcd.css",
+    "main.js": "/aviasales-test-task/static/js/main.60f7ba16.js",
+    "index.html": "/aviasales-test-task/index.html",
+    "main.7515bfcd.css.map": "/aviasales-test-task/static/css/main.7515bfcd.css.map",
+    "main.60f7ba16.js.map": "/aviasales-test-task/static/js/main.60f7ba16.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7515bfcd.css",
+    "static/js/main.60f7ba16.js"
+  ]
+}
