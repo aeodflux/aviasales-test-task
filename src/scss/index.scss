@@ -1,3 +1,19 @@
+
+// @font-face {
+//     font-family: 'Open Sans';
+//     src: url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+//     font-style: normal;
+//     font-weight: 400;
+// }
+// @font-face {
+//     font-family: 'Open Sans';
+//     @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap');
+//     font-style: normal;
+//     font-weight: 600;
+// }
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+
 *, *::after, *::before {
     box-sizing: border-box;
 }
@@ -5,8 +21,148 @@ html {
     scroll-behavior: smooth;
     }
 body {
-    background-color: rgb(255, 255, 255);
+    background: #F3F7FA;
     margin: 0;
     padding: 0;
-    font-family: 'Nunito Sans', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+}
+.main {
+    margin: 0 auto;
+    max-width: 755px;
+}
+.logo {
+    display: block;
+    width: 80px;
+    height: 80px;
+    margin: 40px auto;
+}
+.content {
+    display: flex;
+}
+.filterPanel {
+    background: #FFFFFF;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 20px ;
+    &__heading {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 12px;
+        display: flex;
+        align-items: flex-end;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: #4A4A4A;
+        margin: 0 0 5px;
+    }
+    &__container {
+        display: flex;
+        flex-direction: column;
+    }
+    &__checkbox {
+        display: flex;
+        margin: 5px;
+    }
+    &__label {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 13px;
+        line-height: 20px;
+        color: #4A4A4A;
+    }
+}
+.pageController {
+    display: flex;
+    justify-content: space-around;
+    width: 505px;
+    margin-left: 20px;
+    font-family: 'Open Sans', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 20px;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    height: 50px;
+    &__switch {
+        width: 100%;
+        background-color: #fff;
+        padding: 15px;
+        &-on {
+            width: 100%;
+            background: #2196F3;
+            padding: 15px;
+            color: #FFFFFF;
+        }
+
+    }
+}
+
+.pageSwitch {
+    &__radio {
+        position: absolute;
+        display: block;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: -1;
+    }
+    &__heading {
+        position: absolute;
+        left: 50%;
+        top: 30%;
+        width: 100%;
+        transform: translate(-50%, -50%);
+        font-family: 'Open Sans', sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 20px;
+        display: block;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+    &__container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border-top: 0.3px #DFE5EC solid;
+        border-right: 0.3px #DFE5EC solid;
+        border-bottom: 0.3px #DFE5EC solid;
+        &:focus-within {
+            .pageSwitch__content {
+                background-color: #2196F3;
+                color: #fff;
+            }
+        }
+        &:first-child {
+            border-left: 0.3px #DFE5EC solid;
+            border-radius: 10px 0 0 10px;
+            .pageSwitch__content {
+                border-radius: 10px 0 0 10px;
+            }
+        }
+        &:last-child {
+            border-radius: 0 10px 10px 0;
+            .pageSwitch__content {
+                border-radius: 0 10px 10px 0;
+            }
+        }
+        &-checked {
+            color: #fff;
+            .pageSwitch__content {
+                width: 100%;
+                height: 100%;
+                background-color: #2196F3;
+            }
+        }
+    }
+    &__content {
+        background-color: #fff;
+        width: 100%;
+        height: 100%;
+    }
 }
