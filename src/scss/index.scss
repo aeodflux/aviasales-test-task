@@ -43,7 +43,8 @@ body {
     background: #FFFFFF;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-    padding: 20px ;
+    padding: 20px 0;
+    min-width: 232px;
     &__heading {
         font-style: normal;
         font-weight: 600;
@@ -54,7 +55,7 @@ body {
         letter-spacing: 0.5px;
         text-transform: uppercase;
         color: #4A4A4A;
-        margin: 0 0 5px;
+        margin: 0 20px 15px;
     }
     &__container {
         display: flex;
@@ -62,7 +63,16 @@ body {
     }
     &__checkbox {
         display: flex;
-        margin: 5px;
+        padding: 7px 17px;
+        cursor: pointer;
+        &-checked {
+            background-color: #F1FCFF;
+        }
+        &:focus-within {
+            outline: #2196F3 2px solid;
+            background-color: #F1FCFF;
+            outline-offset: -3px;
+        }
     }
     &__label {
         font-style: normal;
@@ -70,8 +80,44 @@ body {
         font-size: 13px;
         line-height: 20px;
         color: #4A4A4A;
+        cursor: pointer;
+    }
+    &__input {
+        position: absolute;
+        clip: rect(0 0 0 0);
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+    }
+    &__content {
+        position: relative;
+        border: 1px solid #2196F3;
+        width: 20px;
+        height: 20px;
+        border-radius: 2px;
+        margin-right: 7px;
+        &::before {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            content: "";
+            display: block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50px;
+            background-size: contain;
+            margin-top: 2px;
+            margin-left: 0.5px;
+            background-repeat: no-repeat;
+        }
     }
 }
+
+.filterPanel__input:checked + .filterPanel__content::before {
+    background-image: url('../img/shape.svg');
+}
+
 .pageController {
     display: flex;
     justify-content: space-around;
@@ -129,10 +175,14 @@ body {
         position: relative;
         width: 100%;
         height: 100%;
+        cursor: pointer;
         border-top: 0.3px #DFE5EC solid;
         border-right: 0.3px #DFE5EC solid;
         border-bottom: 0.3px #DFE5EC solid;
         &:focus-within {
+            outline: #000000 2px solid;
+            outline-offset: -2px;
+            offset-position: top bottom right;
             .pageSwitch__content {
                 background-color: #2196F3;
                 color: #fff;
