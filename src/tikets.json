@@ -1,0 +1,66 @@
+{"tickets": [
+  {
+    "price": "14000",
+    "carrier": "s7",
+    "segments": [
+      {
+        "origin": "Moscow",
+        "destination": "Tbilisi",
+        "date": "04.22.2022",
+        "stops": [
+          "Minsk", "Erevan"
+        ],
+        "duration": "480"
+      },
+      {
+        "origin": "Tbilisi",
+        "destination": "Moscow",
+        "date": "04.25.2022",
+        "stops": [
+          "Erevan", "Minsk"
+        ],
+        "duration": "450"
+      }
+    ]
+  },
+  {
+    "price": "11350",
+    "carrier": "airlines",
+    "segments": [
+      {
+        "origin": "Kaliningrad",
+        "destination": "Khabarovsk",
+        "date": "04.22.2022",
+        "stops": [],
+        "duration": "270"
+      },
+      {
+        "origin": "Khabarovsk",
+        "destination": "Kaliningrad",
+        "date": "04.25.2022",
+        "stops": ["Moscow"],
+        "duration": "300"
+      }
+    ]
+  },
+  {
+    "price": "12700",
+    "carrier": "s7",
+    "segments": [
+      {
+        "origin": "Moscow",
+        "destination": "Erevan",
+        "date": "04.26.2022",
+        "stops": [],
+        "duration": "300"
+      },
+      {
+        "origin": "Erevan",
+        "destination": "Moscow",
+        "date": "04.28.2022",
+        "stops": ["Minsk"],
+        "duration": "280"
+      }
+    ]
+  }
+], "stop": false}
