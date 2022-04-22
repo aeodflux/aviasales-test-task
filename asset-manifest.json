@@ -1,13 +1,16 @@
 {
   "files": {
-    "main.css": "/aviasales-test-task/static/css/main.7515bfcd.css",
-    "main.js": "/aviasales-test-task/static/js/main.60f7ba16.js",
+    "main.css": "/aviasales-test-task/static/css/main.e0c36b03.css",
+    "main.js": "/aviasales-test-task/static/js/main.d08cee39.js",
+    "static/media/logo.svg": "/aviasales-test-task/static/media/logo.3cb8dabd0effb639d7fb1ba0c61050fe.svg",
+    "static/media/s7logo.svg": "/aviasales-test-task/static/media/s7logo.62e26141359d5723e81be9eb9ab0a63e.svg",
     "index.html": "/aviasales-test-task/index.html",
-    "main.7515bfcd.css.map": "/aviasales-test-task/static/css/main.7515bfcd.css.map",
-    "main.60f7ba16.js.map": "/aviasales-test-task/static/js/main.60f7ba16.js.map"
+    "static/media/shape.svg": "/aviasales-test-task/static/media/shape.b3ce3c21e1b482d2d37a.svg",
+    "main.e0c36b03.css.map": "/aviasales-test-task/static/css/main.e0c36b03.css.map",
+    "main.d08cee39.js.map": "/aviasales-test-task/static/js/main.d08cee39.js.map"
   },
   "entrypoints": [
-    "static/css/main.7515bfcd.css",
-    "static/js/main.60f7ba16.js"
+    "static/css/main.e0c36b03.css",
+    "static/js/main.d08cee39.js"
   ]
 }
