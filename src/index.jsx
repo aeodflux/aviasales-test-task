@@ -2,38 +2,94 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './scss/index.scss';
 import logoImg from './img/logo.svg';
-import s7Logo from "./img/s7logo.svg";
+import s7Logo from "./img/s7Logo.svg";
+import aeroflotLogo from "./img/aeroflotLogo.svg";
+import utairLogo from "./img/utairLogo.svg";
 import classNames from 'classnames';
 import { Server } from "miragejs";
-import ticketsResponse1 from "./tikets.json";
-import ticketsResponse2 from "./tikets2.json";
 
-let fetchCounter = 0;
+const carriers = ["S7", "Aeroflot", "Utair"];
+const aviaCodes = ["ABA", "DYR", "AAQ", "WZA", "KEJ", "MMK", "RTW", "YKS", "SLY", "MOW"]
+
+const ticketsGeneration = (count, stopped) => {
+    const newDate = (n) => {
+        let result = Math.floor(Math.random() * n);
+        if (n === 60 ) {
+            result = Math.floor(result/10) * 10;
+        }
+        if (result < 10) {
+            result = "0" + (result.toString());
+        }
+        return result;
+    }
+    const newStops = (origin, dest) => {
+        let array = [];
+        for ( let i=0; i < Math.floor(Math.random() * 4); i++) {
+            let pushing = (aviaCodes[Math.floor(Math.random() * 10)]);
+            if (!array.find(elem => elem === pushing) && (origin !== pushing) && (dest !== pushing)) {
+                array.push(pushing);
+            }
+        }
+        return array;
+    }
+    const newTicket = () => {
+        let price = (Math.floor(Math.random() * 35 + 11)) + " " + (Math.floor(Math.random() * 9)) + "00";
+        let carrier = carriers[Math.floor(Math.random() * (carriers.length))];
+        let origin1 = aviaCodes[Math.floor(Math.random() * 10)];
+        let destination1 = origin1;
+        while (destination1 === origin1) {
+            destination1 = aviaCodes[Math.floor(Math.random() * 10)];
+        }
+        let origin2 = destination1;
+        let destination2 = origin1;
+        let firstDate = (newDate(24) + ":" + newDate(60) + "-" + newDate(24) + ":" +  newDate(60));
+        let secondDate = (newDate(24) + ":" + newDate(60) + "-" + newDate(24) + ":" +  newDate(60));
+        return ({
+        'price': price,
+        'carriers': carrier,
+        'segments': [{
+            'origin': origin1,
+            'destination': destination1,
+            "date": firstDate,
+            "stops": (newStops(origin1, destination1)),
+            "duration": (Math.floor(Math.random() * 99 + 20)*10)
+            }, 
+            {
+            'origin': origin2,
+            'destination': destination2,
+            "date": secondDate,
+            "stops": (newStops(origin2, destination2)),
+            "duration": (Math.floor(Math.random() * 99 + 20)*10)
+            }
+            ]
+        }
+        )
+    }
+    let response = {
+        tickets: []
+    };
+    for (let i = 0; i < count; i++) {
+        response.tickets.push(newTicket());
+    }
+    response["stop"] = stopped;
+    return response;
+}
+
+let countResponse = 0;
 new Server({
   routes() {
     this.namespace = "api";
     this.get("/users/", () => {
-        if (fetchCounter === 0) {
-            fetchCounter += 1;
-            return ticketsResponse1;
+        if (countResponse === 0) {
+            countResponse++;
+            return ticketsGeneration(15, false);
         } else {
-            fetchCounter += 1;
-            return ticketsResponse2;
-        } 
+            countResponse++;
+            return ticketsGeneration(7, true);
+        }
     });
 }});
 
-let ticketsResponse;
-
-fetch("/api/users/").then(response => {
-      if (!response.ok) throw Error(response.statusText);
-      return response.json();
-    }).then((json) => {
-        console.log(json);
-        ticketsResponse = json;
-    });
-
-console.log(ticketsResponse)
 
 class PageSwitch extends React.Component {
     handlingChange = () => {
@@ -44,7 +100,7 @@ class PageSwitch extends React.Component {
             <div className={classNames('pageSwitch__container', this.props.checked?'pageSwitch__container-checked':'pageSwitch__container')} onClick={() => this.handlingChange()}>
             <h2 className='pageSwitch__heading'>{this.props.label}</h2>
             <div className='pageSwitch__content'></div>
-                <input className='pageSwitch__radio' type="button" name={this.props.name} checked={this.props.checked} value={this.props.value} onChange={this.props.onChange}></input>
+                <input className='pageSwitch__radio' type="radio" name={this.props.name} checked={this.props.checked} value={this.props.value} onChange={this.props.onChange}></input>
             </div>
         )
     }
@@ -128,35 +184,61 @@ class Ticket extends React.Component {
         return(
             <div className='ticketBody'>
                 <div className='ticketBody__headingContainer'>
-                    <h2 className='ticketBody__heading'>17 500 Р</h2>
-                    <img src={s7Logo} alt="logo" width="150px" height="60px"/>
+                    <h2 className='ticketBody__heading'>{this.props.value.price} Р</h2>
+                    <img src={this.props.value.carriers==="S7"?s7Logo:(this.props.value.carriers==="Aeroflot"?aeroflotLogo:utairLogo)} alt="logo" width="150px" height="60px" className={this.props.value.carriers === "Utair"?"logoUtair":"simpleLogo"}/>
                 </div>
                 <div className='ticketBody__data'>
-                    <div className='ticketBody__dataBlock'>
-                        <h2 className='ticketBody__dataHeading'>MOW-HKT</h2>
-                        <h2 className='ticketBody__dataTime'>10:45-08:00</h2>
+                    <div className='ticketBody__dataBlock dataBlock__time'>
+                        <h2 className='ticketBody__dataHeading'>{this.props.value.segments[0].origin}-{this.props.value.segments[0].destination}</h2>
+                        <h2 className='ticketBody__dataTime'>{this.props.value.segments[0].date}</h2>
                     </div>
-                    <div className='ticketBody__dataBlock'>
+                    <div className='ticketBody__dataBlock dataBlock__path'>
                         <h2 className='ticketBody__dataHeading'>В пути</h2>
-                        <h2 className='ticketBody__dataTime'>21ч 15м</h2>
+                        <h2 className='ticketBody__dataTime'>{
+                        (((this.props.value.segments[0].duration)/60 !== 0)?(Math.round((this.props.value.segments[0].duration)/60) + "ч "): "") + 
+                        (((this.props.value.segments[0].duration)%60 !== 0)?
+                        ((Math.round((this.props.value.segments[0].duration)%60)) + "м"):
+                        "")
+                        }</h2>
                     </div>
                     <div className='ticketBody__dataBlock'>
-                        <h2 className='ticketBody__dataHeading'>2 пересадки</h2>
-                        <h2 className='ticketBody__dataTime'>HKG, JNB</h2>
+                    <h2 className={classNames('ticketBody__dataHeading', (this.props.value.segments[0].stops.length === 0)?"dataHeading":"ticketBody__dataHeading")}>{(this.props.value.segments[0].stops.length === 0)?"Без пересадок":((this.props.value.segments[0].stops.length === 1)?(this.props.value.segments[0].stops.length + " пересадка"):(this.props.value.segments[0].stops.length +" пересадки"))}</h2>
+                        <h2 className='ticketBody__dataTime'>{
+                        this.props.value.segments[0].stops.map((elem, index, arr) => {
+                            if (index === arr.length - 1) {
+                                return elem;
+                            } else {
+                                return elem + ", "
+                            }
+                            })
+                        }</h2>
                     </div>
                 </div>
                 <div className='ticketBody__data'>
-                    <div className='ticketBody__dataBlock'>
-                        <h2 className='ticketBody__dataHeading'>MOW-HKT</h2>
-                        <h2 className='ticketBody__dataTime'>10:45-08:00</h2>
+                    <div className='ticketBody__dataBlock dataBlock__time'>
+                        <h2 className='ticketBody__dataHeading'>{this.props.value.segments[1].origin}-{this.props.value.segments[1].destination}</h2>
+                        <h2 className='ticketBody__dataTime'>{this.props.value.segments[1].date}</h2>
                     </div>
-                    <div className='ticketBody__dataBlock'>
+                    <div className='ticketBody__dataBlock dataBlock__path'>
                         <h2 className='ticketBody__dataHeading'>В пути</h2>
-                        <h2 className='ticketBody__dataTime'>21ч 15м</h2>
+                        <h2 className='ticketBody__dataTime'>{
+                        (((this.props.value.segments[1].duration)/60 !== 0)?(Math.round((this.props.value.segments[1].duration)/60) + "ч "): "") + 
+                        (((this.props.value.segments[1].duration)%60 !== 0)?
+                        ((Math.round((this.props.value.segments[1].duration)%60)) + "м"):
+                        "")
+                        }</h2>
                     </div>
                     <div className='ticketBody__dataBlock'>
-                        <h2 className='ticketBody__dataHeading'>2 пересадки</h2>
-                        <h2 className='ticketBody__dataTime'>HKG, JNB</h2>
+                        <h2 className={classNames('ticketBody__dataHeading', (this.props.value.segments[1].stops.length === 0)?"dataHeading":"ticketBody__dataHeading")}>{(this.props.value.segments[1].stops.length === 0)?"Без пересадок":((this.props.value.segments[1].stops.length === 1)?(this.props.value.segments[1].stops.length + " пересадка"):(this.props.value.segments[1].stops.length +" пересадки"))}</h2>
+                        <h2 className='ticketBody__dataTime'>{
+                        this.props.value.segments[1].stops.map((elem, index, arr) => {
+                            if (index === arr.length - 1) {
+                                return elem;
+                            } else {
+                                return elem + ", "
+                            }
+                            })
+                        }</h2>
                     </div>
                 </div>
             </div>
@@ -164,7 +246,26 @@ class Ticket extends React.Component {
     }
 }
 
+
 class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: [],
+            stopResponse: false,
+        };
+    }
+    componentDidMount = () => {
+        this.showMoreTickets();
+    }
+    showMoreTickets = async () => {
+        const response = await fetch("/api/users/");
+        if (!response.ok) return;
+
+        const json = await response.json();
+        this.setState({data: [...this.state.data, json]});
+        this.setState({stopResponse: json.stop})
+    }
     render() {
         return(
             <div className='main'>
@@ -179,12 +280,9 @@ class App extends React.Component {
                     </div>
                     <div className='ticketsPanel'>
                         <div className='ticketsPanel__container'>
-                            <Ticket/>
-                            <Ticket/>
-                            <Ticket/>
-                            <Ticket/>
+                            {this.state.data.map(elem => elem.tickets.map((ticket, index) => <Ticket key={index} value={ticket}/>))}
                         </div>
-                        <button type='button' className='moreResultsButton'>Показать еще 5 билетов</button>
+                        <button type='button' className={classNames('moreResultsButton', this.state.stopResponse?"noMoreResults":'moreResultsButton')} onClick={this.showMoreTickets}>Показать еще билеты</button>
                     </div>
                 </div>
             </div>
