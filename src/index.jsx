@@ -182,7 +182,7 @@ class PageController extends React.Component {
 class Ticket extends React.Component {
     render() {
         return(
-            <div className='ticketBody'>
+            <a className='ticketBody' href="https://www.aviasales.ru/">
                 <div className='ticketBody__headingContainer'>
                     <h2 className='ticketBody__heading'>{this.props.value.price} Р</h2>
                     <img src={this.props.value.carriers==="S7"?s7Logo:(this.props.value.carriers==="Aeroflot"?aeroflotLogo:utairLogo)} alt="logo" width="150px" height="60px" className={this.props.value.carriers === "Utair"?"logoUtair":"simpleLogo"}/>
@@ -241,7 +241,7 @@ class Ticket extends React.Component {
                         }</h2>
                     </div>
                 </div>
-            </div>
+            </a>
         )
     }
 }
@@ -253,23 +253,35 @@ class App extends React.Component {
         this.state = {
             data: [],
             stopResponse: false,
+            loading: false,
         };
     }
     componentDidMount = () => {
         this.showMoreTickets();
     }
     showMoreTickets = async () => {
+        this.setState({loading: true});
         const response = await fetch("/api/users/");
         if (!response.ok) return;
 
         const json = await response.json();
         this.setState({data: [...this.state.data, json]});
-        this.setState({stopResponse: json.stop})
+        this.setState({stopResponse: json.stop});
+        this.setState({loading: false});
     }
     render() {
+        const buttonLoading = () => {
+            if (((this.state.data === []) && (this.state.loading)) || (this.state.stopResponse)) {
+                return;
+            } else if ((this.state.data) && !(this.state.loading)) {
+                return <button type='moreResultsButton' className='moreResultsButton' onClick={this.showMoreTickets}>Показать еще билеты</button>;
+            } else {
+                return <div className='preloader'></div>
+            }
+        }
         return(
             <div className='main'>
-                <a href="https://www.aviasales.ru/"><img className='logo' src={logoImg} alt='logo' width='60px' height='60px'/></a>
+                <a href="https://www.aviasales.ru/" className='logo__href'><img className='logo' src={logoImg} alt='logo' width='60px' height='60px'/></a>
                 <div className='content'>
                     <div className='filterPanel'>
                         <h2 className='filterPanel__heading'>Количество пересадок</h2>
@@ -282,7 +294,7 @@ class App extends React.Component {
                         <div className='ticketsPanel__container'>
                             {this.state.data.map(elem => elem.tickets.map((ticket, index) => <Ticket key={index} value={ticket}/>))}
                         </div>
-                        <button type='button' className={classNames('moreResultsButton', this.state.stopResponse?"noMoreResults":'moreResultsButton')} onClick={this.showMoreTickets}>Показать еще билеты</button>
+                        {buttonLoading()}
                     </div>
                 </div>
             </div>
