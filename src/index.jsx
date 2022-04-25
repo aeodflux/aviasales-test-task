@@ -137,9 +137,9 @@ class Ticket extends React.Component {
                     <div className='ticketBody__dataBlock dataBlock__path'>
                         <h2 className='ticketBody__dataHeading'>В пути</h2>
                         <h2 className='ticketBody__dataTime'>{
-                        (((this.props.value.segments[0].duration)/60 !== 0)?(Math.round((this.props.value.segments[0].duration)/60) + "ч "): "") + 
+                        (((this.props.value.segments[0].duration)/60 !== 0)?(Math.floor((this.props.value.segments[0].duration)/60) + "ч "): "") + 
                         (((this.props.value.segments[0].duration)%60 !== 0)?
-                        ((Math.round((this.props.value.segments[0].duration)%60)) + "м"):
+                        (Math.floor(((this.props.value.segments[0].duration)%60)) + "м"):
                         "")
                         }</h2>
                     </div>
@@ -164,9 +164,9 @@ class Ticket extends React.Component {
                     <div className='ticketBody__dataBlock dataBlock__path'>
                         <h2 className='ticketBody__dataHeading'>В пути</h2>
                         <h2 className='ticketBody__dataTime'>{
-                        (((this.props.value.segments[1].duration)/60 !== 0)?(Math.round((this.props.value.segments[1].duration)/60) + "ч "): "") + 
+                        (((this.props.value.segments[1].duration)/60 !== 0)?(Math.floor((this.props.value.segments[1].duration)/60) + "ч "): "") + 
                         (((this.props.value.segments[1].duration)%60 !== 0)?
-                        ((Math.round((this.props.value.segments[1].duration)%60)) + "м"):
+                        (Math.floor(((this.props.value.segments[1].duration)%60)) + "м"):
                         "")
                         }</h2>
                     </div>
