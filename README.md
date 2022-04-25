@@ -1,6 +1,6 @@
 # Aviasales test task
 
-This task was taken from the Hexlet repository. It was made just for React / TypeScript practice.
+This task was taken from the Hexlet repository. It was made just for React / JavaScript practice.
 
 ## Tech stack
 
