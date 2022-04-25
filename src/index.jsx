@@ -244,17 +244,40 @@ class App extends React.Component {
                 return <div className='preloader'></div>
             }
         }
-        const renderedTickets = (this.state.data.map(response => response.tickets.filter(ticket => 
-            (((ticket.segments[0].stops.length === 0)&&(this.state.withoutTransfer))||
-            ((ticket.segments[0].stops.length === 1)&&(this.state.oneTransfer))||
-            ((ticket.segments[0].stops.length === 2)&&(this.state.twoTransfer))||
-            ((ticket.segments[0].stops.length === 3)&&(this.state.threeTransfer)))&&
-            (((ticket.segments[1].stops.length === 0)&&(this.state.withoutTransfer))||
-            ((ticket.segments[1].stops.length === 1)&&(this.state.oneTransfer))||
-            ((ticket.segments[1].stops.length === 2)&&(this.state.twoTransfer))||
-            ((ticket.segments[1].stops.length === 3)&&(this.state.threeTransfer)))
-            ).map((ticket, index) => <Ticket key={index} value={ticket}/>)
-        ))
+        const cheapestSorting = (a, b) => {
+            return (Number((a.price).replace(/\s+/g, '')) - Number((b.price).replace(/\s+/g, '')))
+        }
+        const fastestSorting = (a, b) => {
+            return ((Number(a.segments[0].duration) + Number(a.segments[1].duration)) - (Number(b.segments[0].duration) + Number(b.segments[1].duration)))
+        }
+        const optimalSorting = (a, b) => {
+            return (((Number(a.segments[0].duration)+Number(a.segments[1].duration))*Number((a.price).replace(/\s+/g, ''))) - 
+            ((Number(b.segments[0].duration)+Number(b.segments[1].duration))*Number((b.price).replace(/\s+/g, ''))))
+        }
+        const renderingTickets = () => {
+            return (this.state.data.map(response => response.tickets.filter(ticket => 
+                (((ticket.segments[0].stops.length === 0)&&(this.state.withoutTransfer))||
+                ((ticket.segments[0].stops.length === 1)&&(this.state.oneTransfer))||
+                ((ticket.segments[0].stops.length === 2)&&(this.state.twoTransfer))||
+                ((ticket.segments[0].stops.length === 3)&&(this.state.threeTransfer)))&&
+                (((ticket.segments[1].stops.length === 0)&&(this.state.withoutTransfer))||
+                ((ticket.segments[1].stops.length === 1)&&(this.state.oneTransfer))||
+                ((ticket.segments[1].stops.length === 2)&&(this.state.twoTransfer))||
+                ((ticket.segments[1].stops.length === 3)&&(this.state.threeTransfer)))
+                ).sort((a, b) => {
+                    if (this.state.pageControllerValue === 'cheapest') {
+                        return cheapestSorting(a, b)
+                    } else if (this.state.pageControllerValue === 'fastest') {
+                        return fastestSorting(a, b)
+                    } else if (this.state.pageControllerValue === 'optimal') {
+                        return optimalSorting(a, b)
+                    } else {
+                        return 
+                    }  
+                }
+                ).map((ticket, index) => <Ticket key={index} value={ticket}/>)))
+        }
+        const renderedTickets = renderingTickets();
         return(
             <div className='main'>
                 <a href="https://www.aviasales.ru/" className='logo__href'><img className='logo' src={logoImg} alt='logo' width='60px' height='60px'/></a>
