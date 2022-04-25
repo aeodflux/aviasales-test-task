@@ -201,6 +201,7 @@ class App extends React.Component {
             oneTransfer: true,
             twoTransfer: true,
             threeTransfer: true,
+            renderedTickets: []
         };
     }
     handlingCheckboxChange = (name) => {
@@ -215,9 +216,11 @@ class App extends React.Component {
             this.setState({allChecked: false})
             this.setState({[name]: !value});
         }
+        this.render()
     }
     handlingRadioChange = (i) => {
-        this.setState({pageControllerValue: i})
+        this.setState({pageControllerValue: i});
+        this.render()
     }
     componentDidMount = () => {
         this.showMoreTickets();
@@ -241,17 +244,17 @@ class App extends React.Component {
                 return <div className='preloader'></div>
             }
         }
-        const renderTickets = () => {
-            return (this.state.data.map(response => response.tickets.filter(ticket => 
-                (((ticket.segments[0].stops.length === 0)&&(this.state.withoutTransfer))||
-                ((ticket.segments[0].stops.length === 1)&&(this.state.oneTransfer))||
-                ((ticket.segments[0].stops.length === 2)&&(this.state.twoTransfer))||
-                ((ticket.segments[0].stops.length === 3)&&(this.state.threeTransfer)))
-                ).map((ticket, index) => <Ticket key={index} value={ticket}/>)
-            ))
-        }
-        const renderedTickets = renderTickets();
-        console.log(renderedTickets);
+        const renderedTickets = (this.state.data.map(response => response.tickets.filter(ticket => 
+            (((ticket.segments[0].stops.length === 0)&&(this.state.withoutTransfer))||
+            ((ticket.segments[0].stops.length === 1)&&(this.state.oneTransfer))||
+            ((ticket.segments[0].stops.length === 2)&&(this.state.twoTransfer))||
+            ((ticket.segments[0].stops.length === 3)&&(this.state.threeTransfer)))&&
+            (((ticket.segments[1].stops.length === 0)&&(this.state.withoutTransfer))||
+            ((ticket.segments[1].stops.length === 1)&&(this.state.oneTransfer))||
+            ((ticket.segments[1].stops.length === 2)&&(this.state.twoTransfer))||
+            ((ticket.segments[1].stops.length === 3)&&(this.state.threeTransfer)))
+            ).map((ticket, index) => <Ticket key={index} value={ticket}/>)
+        ))
         return(
             <div className='main'>
                 <a href="https://www.aviasales.ru/" className='logo__href'><img className='logo' src={logoImg} alt='logo' width='60px' height='60px'/></a>
