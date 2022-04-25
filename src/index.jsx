@@ -121,64 +121,6 @@ class NewCheckbox extends React.Component {
     }
 }
 
-class FilterPanel extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            allChecked: false,
-            withoutTransfer: false,
-            oneTransfer: true,
-            twoTransfer: false,
-            threeTransfer: false,
-        }
-    }
-    handlingCheckboxChange = (name) => {
-        let value = this.state[name];
-        if (name === "allChecked") {
-            this.setState({allChecked: !value});
-            this.setState({withoutTransfer: !value});
-            this.setState({oneTransfer: !value})
-            this.setState({twoTransfer: !value})
-            this.setState({threeTransfer: !value})
-        } else {
-            this.setState({allChecked: false})
-            this.setState({[name]: !value});
-        }
-    }
-    render() {
-        return(
-            <div className="filterPanel__container">
-                <NewCheckbox id='checkboxFilterPanel1' label="Все" checked={this.state.allChecked} value="allChecked" onChange={() => this.handlingCheckboxChange("allChecked")}/>
-                <NewCheckbox id='checkboxFilterPanel2' label="Без пересадок" checked={this.state.withoutTransfer} value="withoutTransfer" onChange={() => this.handlingCheckboxChange("withoutTransfer")}/>
-                <NewCheckbox id='checkboxFilterPanel3' label="1 пересадка" checked={this.state.oneTransfer} value="oneTransfer" onChange={() => this.handlingCheckboxChange("oneTransfer")}/>
-                <NewCheckbox id='checkboxFilterPanel4' label="2 пересадки" checked={this.state.twoTransfer} value="twoTransfer" onChange={() => this.handlingCheckboxChange("twoTransfer")}/>
-                <NewCheckbox id='checkboxFilterPanel5' label="3 пересадки" checked={this.state.threeTransfer} value="threeTransfer" onChange={() => this.handlingCheckboxChange("threeTransfer")}/>
-            </div>
-        )
-    }
-}
-
-class PageController extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            pageControllerValue: 0,
-        }
-    }
-    handlingRadioChange = (i) => {
-        this.setState({pageControllerValue: i})
-    }
-    render() {
-        return(
-            <div className="pageController">
-                <PageSwitch name="radioBiletsPanel" value='cheapest' label="Самый дешевый" checked={this.state.pageControllerValue==='cheapest'} onChange={() => this.handlingRadioChange('cheapest')}></PageSwitch>
-                <PageSwitch name="radioBiletsPanel" value='fastest' label="Самый быстрый" checked={this.state.pageControllerValue==='fastest'} onChange={() => this.handlingRadioChange('fastest')}></PageSwitch>
-                <PageSwitch name="radioBiletsPanel" value='optimal' label="Оптимальный" checked={this.state.pageControllerValue==='optimal'} onChange={() => this.handlingRadioChange('optimal')}></PageSwitch>
-            </div>
-        )
-    }
-}
-
 class Ticket extends React.Component {
     render() {
         return(
@@ -246,7 +188,6 @@ class Ticket extends React.Component {
     }
 }
 
-
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -254,7 +195,29 @@ class App extends React.Component {
             data: [],
             stopResponse: false,
             loading: false,
+            pageControllerValue: 0,
+            allChecked: true,
+            withoutTransfer: true,
+            oneTransfer: true,
+            twoTransfer: true,
+            threeTransfer: true,
         };
+    }
+    handlingCheckboxChange = (name) => {
+        let value = this.state[name];
+        if (name === "allChecked") {
+            this.setState({allChecked: !value});
+            this.setState({withoutTransfer: !value});
+            this.setState({oneTransfer: !value})
+            this.setState({twoTransfer: !value})
+            this.setState({threeTransfer: !value})
+        } else {
+            this.setState({allChecked: false})
+            this.setState({[name]: !value});
+        }
+    }
+    handlingRadioChange = (i) => {
+        this.setState({pageControllerValue: i})
     }
     componentDidMount = () => {
         this.showMoreTickets();
@@ -263,7 +226,6 @@ class App extends React.Component {
         this.setState({loading: true});
         const response = await fetch("/api/users/");
         if (!response.ok) return;
-
         const json = await response.json();
         this.setState({data: [...this.state.data, json]});
         this.setState({stopResponse: json.stop});
@@ -279,20 +241,45 @@ class App extends React.Component {
                 return <div className='preloader'></div>
             }
         }
+        const renderTickets = () => {
+            return (this.state.data.map(response => response.tickets.filter(ticket => 
+                (((ticket.segments[0].stops.length === 0)&&(this.state.withoutTransfer))||
+                ((ticket.segments[0].stops.length === 1)&&(this.state.oneTransfer))||
+                ((ticket.segments[0].stops.length === 2)&&(this.state.twoTransfer))||
+                ((ticket.segments[0].stops.length === 3)&&(this.state.threeTransfer)))
+                ).map((ticket, index) => <Ticket key={index} value={ticket}/>)
+            ))
+        }
+        const renderedTickets = renderTickets();
+        console.log(renderedTickets);
         return(
             <div className='main'>
                 <a href="https://www.aviasales.ru/" className='logo__href'><img className='logo' src={logoImg} alt='logo' width='60px' height='60px'/></a>
                 <div className='content'>
                     <div className='filterPanel'>
                         <h2 className='filterPanel__heading'>Количество пересадок</h2>
-                        <FilterPanel/>
+                        <div className="filterPanel__container">
+                            <NewCheckbox id='checkboxFilterPanel1' label="Все" checked={this.state.allChecked} value="allChecked" onChange={() => this.handlingCheckboxChange("allChecked")}/>
+                            <NewCheckbox id='checkboxFilterPanel2' label="Без пересадок" checked={this.state.withoutTransfer} value="withoutTransfer" onChange={() => this.handlingCheckboxChange("withoutTransfer")}/>
+                            <NewCheckbox id='checkboxFilterPanel3' label="1 пересадка" checked={this.state.oneTransfer} value="oneTransfer" onChange={() => this.handlingCheckboxChange("oneTransfer")}/>
+                            <NewCheckbox id='checkboxFilterPanel4' label="2 пересадки" checked={this.state.twoTransfer} value="twoTransfer" onChange={() => this.handlingCheckboxChange("twoTransfer")}/>
+                            <NewCheckbox id='checkboxFilterPanel5' label="3 пересадки" checked={this.state.threeTransfer} value="threeTransfer" onChange={() => this.handlingCheckboxChange("threeTransfer")}/>
+                        </div>
                     </div>
                     <div className='biletsPanel'>
-                        <PageController/>
+                    <div className="pageController">
+                        <PageSwitch name="radioBiletsPanel" value='cheapest' label="Самый дешевый" checked={this.state.pageControllerValue==='cheapest'} onChange={() => this.handlingRadioChange('cheapest')}></PageSwitch>
+                        <PageSwitch name="radioBiletsPanel" value='fastest' label="Самый быстрый" checked={this.state.pageControllerValue==='fastest'} onChange={() => this.handlingRadioChange('fastest')}></PageSwitch>
+                        <PageSwitch name="radioBiletsPanel" value='optimal' label="Оптимальный" checked={this.state.pageControllerValue==='optimal'} onChange={() => this.handlingRadioChange('optimal')}></PageSwitch>
+                    </div>
                     </div>
                     <div className='ticketsPanel'>
                         <div className='ticketsPanel__container'>
-                            {this.state.data.map(elem => elem.tickets.map((ticket, index) => <Ticket key={index} value={ticket}/>))}
+                            {(renderedTickets[0]?((renderedTickets[0].length === 0)?
+                            <h2 className='strictFiltersWarning'>
+                            Слишком строгие фильтры
+                            </h2>
+                            :renderedTickets):renderedTickets)}
                         </div>
                         {buttonLoading()}
                     </div>
