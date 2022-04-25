@@ -20,6 +20,10 @@ This task was taken from the Hexlet repository. It was made just for React / Jav
 
 [Aviasales Figma Template](https://www.figma.com/file/clycQflirusfWgi6nIfgV9/Aviasales-Test-Task)
 
+## Server
+
+Due to server shutdown, the project uses mocking through the MirageJs library and random ticket generation.
+
 ## Install
 
 ```
