@@ -2,6 +2,10 @@
 
 This task was taken from the Hexlet repository. It was made just for React / JavaScript practice.
 
+## Demo 
+
+[Aviasales Test Task](https://silkesssji.github.io/aviasales-test-task/)
+
 ## Tech stack
 
 *Languages:* JavaScript
