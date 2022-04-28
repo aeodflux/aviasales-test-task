@@ -62,7 +62,16 @@ body {
         display: flex;
         padding: 7px 17px;
         cursor: pointer;
-        &:focus-within {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 13px;
+        line-height: 20px;
+        color: #4A4A4A;
+        cursor: pointer;
+        &-checked {
+            outline: none;
+        }
+        &:focus {
             outline: #2196F3 2px solid;
             outline-offset: -3px;
         }

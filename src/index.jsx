@@ -346,11 +346,11 @@ class App extends React.Component {
                     </div>
                     <div className='ticketsPanel'>
                         <div className='ticketsPanel__container'>
-                            {/* {(renderedTickets[0]?((renderedTickets[0].length === 0)?
+                            {(renderedTickets[0]?((renderedTickets[0].length === 0)?
                             <h2 className='strictFiltersWarning'>
+                                Не найдено результатов
                             </h2>
-                            :renderedTickets):renderedTickets)} */}
-                            {renderedTickets}
+                            :renderedTickets):renderedTickets)}
                         </div>
                         {this.buttonLoading()}
                     </div>
