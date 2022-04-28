@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './scss/index.scss';
 import logoImg from './img/logo.svg';
-import s7Logo from "./img/s7Logo.svg";
+import s7Logo from "./img/s7logo.svg";
 import aeroflotLogo from "./img/aeroflotLogo.svg";
 import utairLogo from "./img/utairLogo.svg";
 import classNames from 'classnames';
@@ -91,6 +91,17 @@ new Server({
 }});
 
 
+const cheapestSorting = (a, b) => {
+    return (Number((a.price).replace(/\s+/g, '')) - Number((b.price).replace(/\s+/g, '')))
+}
+const fastestSorting = (a, b) => {
+    return ((Number(a.segments[0].duration) + Number(a.segments[1].duration)) - (Number(b.segments[0].duration) + Number(b.segments[1].duration)))
+}
+const optimalSorting = (a, b) => {
+    return (((Number(a.segments[0].duration)+Number(a.segments[1].duration))*Number((a.price).replace(/\s+/g, ''))) - 
+    ((Number(b.segments[0].duration)+Number(b.segments[1].duration))*Number((b.price).replace(/\s+/g, ''))))
+}
+
 class PageSwitch extends React.Component {
     handlingChange = () => {
         this.props.onChange();
@@ -107,16 +118,14 @@ class PageSwitch extends React.Component {
 }
 
 class NewCheckbox extends React.Component {
-    handlingChange = () => {
-        this.props.onChange();
-    }
     render() {
         return(
-            <div className={classNames("filterPanel__checkbox", this.props.checked?"filterPanel__checkbox-checked":"filterPanel__checkbox")} onClick={this.handlingChange}>
-                <input className='filterPanel__input' type="checkbox" id={this.props.id} checked={this.props.checked} onChange={this.props.onChange}/>
-                <div className='filterPanel__content' onClick={this.handlingChange}></div>
-                <label className='filterPanel__label' htmlFor={this.props.id} onClick={(e) => e.preventDefault()}>{this.props.label}</label>
-            </div>
+            <label className={classNames("filterPanel__checkbox", this.props.checked?"filterPanel__checkbox-checked":"filterPanel__checkbox")} >
+                <input className='filterPanel__input' type="checkbox" id={this.props.id} checked={this.props.checked} onChange={this.props.onChange}
+                value={this.props.value}/>
+                <div className='filterPanel__content'></div>
+                {this.props.label}
+            </label>
         )
     }
 }
@@ -221,6 +230,7 @@ const skeletonTicket = <div className='ticketBody skeletonTicket'>
     </div>
 </div>
 </div>
+
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -229,7 +239,6 @@ class App extends React.Component {
             stopResponse: false,
             loading: false,
             pageControllerValue: 0,
-            allChecked: true,
             withoutTransfer: true,
             oneTransfer: true,
             twoTransfer: true,
@@ -237,23 +246,27 @@ class App extends React.Component {
             renderedTickets: []
         };
     }
-    handlingCheckboxChange = (name) => {
-        let value = this.state[name];
-        if (name === "allChecked") {
-            this.setState({allChecked: !value});
-            this.setState({withoutTransfer: !value});
-            this.setState({oneTransfer: !value})
-            this.setState({twoTransfer: !value})
-            this.setState({threeTransfer: !value})
+    changeCheckboxState = (name) => {
+        this.setState((state) => {
+            return {[name]: !state[name]}
+        });
+    }
+    handlingCheckboxChange = (e) => {
+        const nextChecked = e.target.checked;
+        if (e.target.value === "allChecked") {
+            this.setState({
+                withoutTransfer: nextChecked,
+                oneTransfer: nextChecked,
+                twoTransfer: nextChecked,
+                threeTransfer: nextChecked
+            })
         } else {
-            this.setState({allChecked: false})
-            this.setState({[name]: !value});
+            this.setState({[e.target.value]: nextChecked});
         }
-        this.render()
+        
     }
     handlingRadioChange = (i) => {
         this.setState({pageControllerValue: i});
-        this.render()
     }
     componentDidMount = () => {
         this.showMoreTickets();
@@ -267,45 +280,37 @@ class App extends React.Component {
         this.setState({stopResponse: json.stop});
         this.setState({loading: false});
     }
+    buttonLoading = () => {
+        if (((this.state.data === []) && (this.state.loading)) || (this.state.stopResponse)) {
+            return;
+        } else if ((this.state.data) && !(this.state.loading)) {
+            return <button type='moreResultsButton' className='moreResultsButton' onClick={this.showMoreTickets}>Показать еще билеты</button>;
+        } else {
+            return <div>
+                {skeletonTicket}
+                {skeletonTicket}
+                {skeletonTicket}
+                {skeletonTicket}
+                {skeletonTicket}
+                {skeletonTicket}
+            </div>
+        }
+    }
     render() {
-        const buttonLoading = () => {
-            if (((this.state.data === []) && (this.state.loading)) || (this.state.stopResponse)) {
-                return;
-            } else if ((this.state.data) && !(this.state.loading)) {
-                return <button type='moreResultsButton' className='moreResultsButton' onClick={this.showMoreTickets}>Показать еще билеты</button>;
-            } else {
-                return <div
-                //  className='preloader'
-                 >
-                    {skeletonTicket}
-                    {skeletonTicket}
-                    {skeletonTicket}
-                    {skeletonTicket}
-                    {skeletonTicket}
-                    {skeletonTicket}
-                </div>
-            }
-        }
-        const cheapestSorting = (a, b) => {
-            return (Number((a.price).replace(/\s+/g, '')) - Number((b.price).replace(/\s+/g, '')))
-        }
-        const fastestSorting = (a, b) => {
-            return ((Number(a.segments[0].duration) + Number(a.segments[1].duration)) - (Number(b.segments[0].duration) + Number(b.segments[1].duration)))
-        }
-        const optimalSorting = (a, b) => {
-            return (((Number(a.segments[0].duration)+Number(a.segments[1].duration))*Number((a.price).replace(/\s+/g, ''))) - 
-            ((Number(b.segments[0].duration)+Number(b.segments[1].duration))*Number((b.price).replace(/\s+/g, ''))))
-        }
-        const renderingTickets = () => {
-            return (this.state.data.map(response => response.tickets.filter(ticket => 
-                (((ticket.segments[0].stops.length === 0)&&(this.state.withoutTransfer))||
+        const renderedTickets = (this.state.data.map(response => response.tickets.filter(ticket => {
+                if (this.state.withoutTransfer === this.state.oneTransfer === this.state.twoTransfer === this.state.threeTransfer) {
+                    return true;
+                } else {
+                return((((ticket.segments[0].stops.length === 0)&&(this.state.withoutTransfer))||
                 ((ticket.segments[0].stops.length === 1)&&(this.state.oneTransfer))||
                 ((ticket.segments[0].stops.length === 2)&&(this.state.twoTransfer))||
                 ((ticket.segments[0].stops.length === 3)&&(this.state.threeTransfer)))&&
                 (((ticket.segments[1].stops.length === 0)&&(this.state.withoutTransfer))||
                 ((ticket.segments[1].stops.length === 1)&&(this.state.oneTransfer))||
                 ((ticket.segments[1].stops.length === 2)&&(this.state.twoTransfer))||
-                ((ticket.segments[1].stops.length === 3)&&(this.state.threeTransfer)))
+                ((ticket.segments[1].stops.length === 3)&&(this.state.threeTransfer))))
+                }
+                }
                 ).sort((a, b) => {
                     if (this.state.pageControllerValue === 'cheapest') {
                         return cheapestSorting(a, b)
@@ -318,8 +323,6 @@ class App extends React.Component {
                     }  
                 }
                 ).map((ticket, index) => <Ticket key={index} value={ticket}/>)))
-        }
-        const renderedTickets = renderingTickets();
         return(
             <div className='main'>
                 <a href="https://www.aviasales.ru/" className='logo__href'><img className='logo' src={logoImg} alt='logo' width='60px' height='60px'/></a>
@@ -327,11 +330,11 @@ class App extends React.Component {
                     <div className='filterPanel'>
                         <h2 className='filterPanel__heading'>Количество пересадок</h2>
                         <div className="filterPanel__container">
-                            <NewCheckbox id='checkboxFilterPanel1' label="Все" checked={this.state.allChecked} value="allChecked" onChange={() => this.handlingCheckboxChange("allChecked")}/>
-                            <NewCheckbox id='checkboxFilterPanel2' label="Без пересадок" checked={this.state.withoutTransfer} value="withoutTransfer" onChange={() => this.handlingCheckboxChange("withoutTransfer")}/>
-                            <NewCheckbox id='checkboxFilterPanel3' label="1 пересадка" checked={this.state.oneTransfer} value="oneTransfer" onChange={() => this.handlingCheckboxChange("oneTransfer")}/>
-                            <NewCheckbox id='checkboxFilterPanel4' label="2 пересадки" checked={this.state.twoTransfer} value="twoTransfer" onChange={() => this.handlingCheckboxChange("twoTransfer")}/>
-                            <NewCheckbox id='checkboxFilterPanel5' label="3 пересадки" checked={this.state.threeTransfer} value="threeTransfer" onChange={() => this.handlingCheckboxChange("threeTransfer")}/>
+                            <NewCheckbox id='checkboxFilterPanel1' label="Все" checked={this.state.withoutTransfer && this.state.oneTransfer && this.state.twoTransfer && this.state.threeTransfer} value="allChecked" onChange={this.handlingCheckboxChange}/>
+                            <NewCheckbox id='checkboxFilterPanel2' label="Без пересадок" checked={this.state.withoutTransfer} value="withoutTransfer" onChange={this.handlingCheckboxChange}/>
+                            <NewCheckbox id='checkboxFilterPanel3' label="1 пересадка" checked={this.state.oneTransfer} value="oneTransfer" onChange={this.handlingCheckboxChange}/>
+                            <NewCheckbox id='checkboxFilterPanel4' label="2 пересадки" checked={this.state.twoTransfer} value="twoTransfer" onChange={this.handlingCheckboxChange}/>
+                            <NewCheckbox id='checkboxFilterPanel5' label="3 пересадки" checked={this.state.threeTransfer} value="threeTransfer" onChange={this.handlingCheckboxChange}/>
                         </div>
                     </div>
                     <div className='biletsPanel'>
@@ -343,13 +346,13 @@ class App extends React.Component {
                     </div>
                     <div className='ticketsPanel'>
                         <div className='ticketsPanel__container'>
-                            {(renderedTickets[0]?((renderedTickets[0].length === 0)?
+                            {/* {(renderedTickets[0]?((renderedTickets[0].length === 0)?
                             <h2 className='strictFiltersWarning'>
-                            Слишком строгие фильтры
                             </h2>
-                            :renderedTickets):renderedTickets)}
+                            :renderedTickets):renderedTickets)} */}
+                            {renderedTickets}
                         </div>
-                        {buttonLoading()}
+                        {this.buttonLoading()}
                     </div>
                 </div>
             </div>
