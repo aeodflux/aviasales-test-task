@@ -78,6 +78,7 @@ const ticketsGeneration = (count, stopped) => {
 let countResponse = 0;
 new Server({
   routes() {
+    this.timing = 2000;
     this.namespace = "api";
     this.get("/users/", () => {
         if (countResponse === 0) {
@@ -87,7 +88,7 @@ new Server({
             countResponse++;
             return ticketsGeneration(7, true);
         }
-    });
+    }, { timing: 2000 });
 }});
 
 
@@ -123,7 +124,8 @@ class NewCheckbox extends React.Component {
             <label className={classNames("filterPanel__checkbox", this.props.checked?"filterPanel__checkbox-checked":"filterPanel__checkbox")} >
                 <input className='filterPanel__input' type="checkbox" id={this.props.id} checked={this.props.checked} onChange={this.props.onChange}
                 value={this.props.value}/>
-                <div className='filterPanel__content'></div>
+                <div className='filterPanel__content'>{this.props.value !== "allChecked"?<button className='checkbox__onlyFilterButton' type='button'
+                onClick={this.props.onFilter}>Только</button>:""}</div>
                 {this.props.label}
             </label>
         )
@@ -265,6 +267,21 @@ class App extends React.Component {
         }
         
     }
+    onOnlyChange = (e) => {
+        if (this.state.withoutTransfer !== e) {
+            this.setState({withoutTransfer: false})
+        }
+        if (this.state.oneTransfer !== e) {
+            this.setState({oneTransfer: false})
+        }
+        if (this.state.twoTransfer !== e) {
+            this.setState({twoTransfer: false})
+        }
+        if (this.state.threeTransfer !== e) {
+            this.setState({threeTransfer: false})
+        }
+        this.setState({[e]: true})
+    }
     handlingRadioChange = (i) => {
         this.setState({pageControllerValue: i});
     }
@@ -330,11 +347,11 @@ class App extends React.Component {
                     <div className='filterPanel'>
                         <h2 className='filterPanel__heading'>Количество пересадок</h2>
                         <div className="filterPanel__container">
-                            <NewCheckbox id='checkboxFilterPanel1' label="Все" checked={this.state.withoutTransfer && this.state.oneTransfer && this.state.twoTransfer && this.state.threeTransfer} value="allChecked" onChange={this.handlingCheckboxChange}/>
-                            <NewCheckbox id='checkboxFilterPanel2' label="Без пересадок" checked={this.state.withoutTransfer} value="withoutTransfer" onChange={this.handlingCheckboxChange}/>
-                            <NewCheckbox id='checkboxFilterPanel3' label="1 пересадка" checked={this.state.oneTransfer} value="oneTransfer" onChange={this.handlingCheckboxChange}/>
-                            <NewCheckbox id='checkboxFilterPanel4' label="2 пересадки" checked={this.state.twoTransfer} value="twoTransfer" onChange={this.handlingCheckboxChange}/>
-                            <NewCheckbox id='checkboxFilterPanel5' label="3 пересадки" checked={this.state.threeTransfer} value="threeTransfer" onChange={this.handlingCheckboxChange}/>
+                            <NewCheckbox id='checkboxFilterPanel1' label="Все" checked={this.state.withoutTransfer && this.state.oneTransfer && this.state.twoTransfer && this.state.threeTransfer} value="allChecked" onChange={this.handlingCheckboxChange} onFilter={() => this.onOnlyChange("allChecked")}/>
+                            <NewCheckbox id='checkboxFilterPanel2' label="Без пересадок" checked={this.state.withoutTransfer} value="withoutTransfer" onChange={this.handlingCheckboxChange} onFilter={() => this.onOnlyChange("withoutTransfer")}/>
+                            <NewCheckbox id='checkboxFilterPanel3' label="1 пересадка" checked={this.state.oneTransfer} value="oneTransfer" onChange={this.handlingCheckboxChange} onFilter={() => this.onOnlyChange("oneTransfer")}/>
+                            <NewCheckbox id='checkboxFilterPanel4' label="2 пересадки" checked={this.state.twoTransfer} value="twoTransfer" onChange={this.handlingCheckboxChange} onFilter={() => this.onOnlyChange("twoTransfer")}/>
+                            <NewCheckbox id='checkboxFilterPanel5' label="3 пересадки" checked={this.state.threeTransfer} value="threeTransfer" onChange={this.handlingCheckboxChange} onFilter={() => this.onOnlyChange("threeTransfer")}/>
                         </div>
                     </div>
                     <div className='biletsPanel'>
