@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-
+import "./new-checkbox.scss";
 
 export const NewCheckbox = class NewCheckbox extends React.Component {
     render() {

@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-
+import "./page-switch.scss";
 
 export const PageSwitch = class PageSwitch extends React.Component {
     handlingChange = () => {

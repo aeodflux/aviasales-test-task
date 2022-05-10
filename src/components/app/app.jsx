@@ -1,9 +1,10 @@
 import React from 'react';
-import { PageSwitch } from "../components/page-switch";
-import { NewCheckbox } from '../components/new-checkbox';
-import { Ticket } from '../components/ticket';
-import logoImg from '../img/logo.svg';
-import { fastestSorting, optimalSorting, cheapestSorting } from '../lib/sorting'
+import { PageSwitch } from "../page-switch/page-switch";
+import { NewCheckbox } from '../new-checkbox/new-checkbox';
+import { Ticket } from '../ticket/ticket';
+import logoImg from '../../img/logo.svg';
+import { fastestSorting, optimalSorting, cheapestSorting } from '../../lib/sorting';
+import "./app.scss"
 
 const skeletonTicket = <div className='ticketBody skeletonTicket'>
 <div className='ticketBody__headingContainer'>
@@ -51,8 +52,7 @@ export const App = class App extends React.Component {
             withoutTransfer: true,
             oneTransfer: true,
             twoTransfer: true,
-            threeTransfer: true,
-            renderedTickets: []
+            threeTransfer: true
         };
     }
     changeCheckboxState = (name) => {
@@ -89,7 +89,7 @@ export const App = class App extends React.Component {
         }
         this.setState({[e]: true})
     }
-    
+
     handlingRadioChange = (i) => {
         this.setState({pageControllerValue: i});
     }
@@ -107,9 +107,9 @@ export const App = class App extends React.Component {
     }
     buttonLoading = () => {
         if (((this.state.data === []) && (this.state.loading)) || (this.state.stopResponse)) {
-            return;
+            return false;
         } else if ((this.state.data) && !(this.state.loading)) {
-            return <button type='moreResultsButton' className='moreResultsButton' onClick={this.showMoreTickets}>Показать еще билеты</button>;
+            return <button type='button' className='moreResultsButton' onClick={this.showMoreTickets}>Показать еще билеты</button>;
         } else {
             return <div>
                 {skeletonTicket}
@@ -121,33 +121,36 @@ export const App = class App extends React.Component {
             </div>
         }
     }
-    render() {
-        const renderedTickets = (this.state.data.map(response => response.tickets.filter(ticket => {
-                if (this.state.withoutTransfer === this.state.oneTransfer === this.state.twoTransfer === this.state.threeTransfer) {
-                    return true;
+    renderedTickets = () => {
+        return (this.state.data.map(response => response.tickets.filter(ticket => {
+            if (this.state.withoutTransfer === this.state.oneTransfer === this.state.twoTransfer === this.state.threeTransfer) {
+                return true;
+            } else {
+            return((((ticket.segments[0].stops.length === 0)&&(this.state.withoutTransfer))||
+            ((ticket.segments[0].stops.length === 1)&&(this.state.oneTransfer))||
+            ((ticket.segments[0].stops.length === 2)&&(this.state.twoTransfer))||
+            ((ticket.segments[0].stops.length === 3)&&(this.state.threeTransfer)))&&
+            (((ticket.segments[1].stops.length === 0)&&(this.state.withoutTransfer))||
+            ((ticket.segments[1].stops.length === 1)&&(this.state.oneTransfer))||
+            ((ticket.segments[1].stops.length === 2)&&(this.state.twoTransfer))||
+            ((ticket.segments[1].stops.length === 3)&&(this.state.threeTransfer))))
+            }
+            }
+            ).sort((a, b) => {
+                if (this.state.pageControllerValue === 'cheapest') {
+                    return cheapestSorting(a, b)
+                } else if (this.state.pageControllerValue === 'fastest') {
+                    return fastestSorting(a, b)
+                } else if (this.state.pageControllerValue === 'optimal') {
+                    return optimalSorting(a, b)
                 } else {
-                return((((ticket.segments[0].stops.length === 0)&&(this.state.withoutTransfer))||
-                ((ticket.segments[0].stops.length === 1)&&(this.state.oneTransfer))||
-                ((ticket.segments[0].stops.length === 2)&&(this.state.twoTransfer))||
-                ((ticket.segments[0].stops.length === 3)&&(this.state.threeTransfer)))&&
-                (((ticket.segments[1].stops.length === 0)&&(this.state.withoutTransfer))||
-                ((ticket.segments[1].stops.length === 1)&&(this.state.oneTransfer))||
-                ((ticket.segments[1].stops.length === 2)&&(this.state.twoTransfer))||
-                ((ticket.segments[1].stops.length === 3)&&(this.state.threeTransfer))))
-                }
-                }
-                ).sort((a, b) => {
-                    if (this.state.pageControllerValue === 'cheapest') {
-                        return cheapestSorting(a, b)
-                    } else if (this.state.pageControllerValue === 'fastest') {
-                        return fastestSorting(a, b)
-                    } else if (this.state.pageControllerValue === 'optimal') {
-                        return optimalSorting(a, b)
-                    } else {
-                        return this
-                    }  
-                }
-                ).map((ticket, index) => <Ticket key={index} value={ticket}/>)))
+                    return this
+                }  
+            }
+            ).map((ticket, index) => <Ticket key={index} value={ticket}/>))
+        )
+    }
+    render() {
         return(
             <div className='main'>
                 <a href="https://www.aviasales.ru/" className='logo__href'><img className='logo' src={logoImg} alt='logo' width='60px' height='60px'/></a>
@@ -171,11 +174,11 @@ export const App = class App extends React.Component {
                     </div>
                     <div className='ticketsPanel'>
                         <div className='ticketsPanel__container'>
-                            {(renderedTickets[0]?((renderedTickets[0].length === 0)?
+                            {(this.renderedTickets()[0]?((this.renderedTickets()[0].length === 0)?
                             <h2 className='strictFiltersWarning'>
                                 Не найдено результатов
                             </h2>
-                            :renderedTickets):renderedTickets)}
+                            :this.renderedTickets()):this.renderedTickets())}
                         </div>
                         {this.buttonLoading()}
                     </div>
