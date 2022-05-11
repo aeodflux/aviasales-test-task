@@ -107,11 +107,13 @@
         }
     }
 }
+
 .checkbox__onlyFilterButton {
     display: block;
     opacity: 0;
     order: 2;
 }
+
 .filterPanel__input:checked + .filterPanel__content::before {
     background-image: url('../../img/shape.svg');
 }

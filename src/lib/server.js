@@ -1,18 +1,17 @@
 import { Server } from "miragejs";
 import { ticketsGeneration } from "./tickets-generation"
 
-let countResponse = 0;
+let randomResponse = Math.floor(Math.random() * 5);
+let responceCount = 0;
 new Server({
   routes() {
-    this.timing = 2000;
     this.namespace = "api";
     this.get("/users/", () => {
-        if (countResponse === 0) {
-            countResponse++;
-            return ticketsGeneration(15, false);
+        responceCount ++;
+        if (randomResponse === responceCount) {
+            return ticketsGeneration(Math.floor(Math.random() * 7), true);
         } else {
-            countResponse++;
-            return ticketsGeneration(7, true);
+            return ticketsGeneration(15, false);
         }
-    }, { timing: 2000 });
+    }, { timing: 1000 });
 }});

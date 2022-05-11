@@ -32,6 +32,7 @@
     margin: 0 auto;
     max-width: 755px;
 }
+
 .logo {
     display: block;
     width: 80px;
@@ -43,11 +44,13 @@
         }
     }
 }
+
 .content {
     display: grid;
     grid-template-columns: auto auto;
     grid-template-rows: auto auto;
 }
+
 .pageController {
     display: flex;
     justify-content: space-around;
@@ -73,7 +76,6 @@
             padding: 15px;
             color: #FFFFFF;
         }
-
     }
 }
 
@@ -82,7 +84,6 @@
     grid-row: 1/1;
     height: fit-content;
 }
-
 
 .ticketsPanel {
     grid-column: 2/2;
@@ -120,9 +121,6 @@
         outline: #000000 2px solid;
     }
 }
-.noMoreResults {
-    display: none;
-}
 
 .logoUtair {
     position: absolute;
@@ -130,20 +128,22 @@
     margin-top: 10px;
     width: 100px;
 }
-.dataBlock__time {
-    width: 100px;
+
+.dataBlock {
+    &__time {
+        width: 100px;
+    }
+    &__path {
+        width: 65px;
+    }
 }
-.dataBlock__path {
-    width: 65px;
-}
+
 .dataHeading {
     margin-top: 5px;
     position: absolute;
     width: 105px;
 }
-.displayNone {
-    display: none;
-}
+
 .strictFiltersWarning {
     font-family: 'Open Sans';
     font-style: normal;
