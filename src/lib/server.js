@@ -1,5 +1,6 @@
 import { Server } from "miragejs";
-import { ticketsGeneration } from "./tickets-generation"
+import { ticketsGeneration } from "./tickets-generation";
+// import { Response } from 'miragejs';
 
 let randomResponse = Math.floor(Math.random() * 5);
 let responceCount = 0;
@@ -14,4 +15,6 @@ new Server({
             return ticketsGeneration(15, false);
         }
     }, { timing: 1000 });
+    // this.get("/users/", () => {
+    //     return new Response(404, { errors: [ 'server error'] });
 }});

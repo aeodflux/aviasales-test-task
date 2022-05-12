@@ -30,15 +30,15 @@
         border-top: 0.3px #DFE5EC solid;
         border-right: 0.3px #DFE5EC solid;
         border-bottom: 0.3px #DFE5EC solid;
-        &:focus-within {
-            outline: #000000 2px solid;
-            outline-offset: -2px;
-            offset-position: top bottom right;
-            .pageSwitch__content {
-                background-color: #2196F3;
-                color: #fff;
-            }
-        }
+        // &:focus-within {
+        //     outline: #000000 2px solid;
+        //     outline-offset: -2px;
+        //     offset-position: top bottom right;
+        //     .pageSwitch__content {
+        //         background-color: #2196F3;
+        //         color: #fff;
+        //     }
+        // }
         &:first-child {
             border-left: 0.3px #DFE5EC solid;
             border-radius: 5px 0 0 5px;

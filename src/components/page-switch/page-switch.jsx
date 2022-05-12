@@ -1,15 +1,11 @@
 import React from 'react';
-import classNames from 'classnames';
+import cn from 'classnames';
 import "./page-switch.scss";
 
-export const PageSwitch = class PageSwitch extends React.Component {
-    handlingChange = () => {
-        this.props.onChange();
-    }
+export class PageSwitch extends React.Component {
     render() {
         return(
-            <div className={classNames('pageSwitch__container', this.props.checked?'pageSwitch__container-checked':'pageSwitch__container')} 
-            onClick={() => this.handlingChange()}>
+            <label className={cn('pageSwitch__container', this.props.checked?'pageSwitch__container-checked':'pageSwitch__container')}>
                 <h2 className='pageSwitch__heading'>{this.props.label}</h2>
                 <div className='pageSwitch__content'></div>
                 <input className='pageSwitch__radio' 
@@ -19,7 +15,7 @@ export const PageSwitch = class PageSwitch extends React.Component {
                     value={this.props.value} 
                     onChange={this.props.onChange}
                 />
-            </div>
+            </label>
         )
     }
 }

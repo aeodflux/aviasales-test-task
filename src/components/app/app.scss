@@ -1,33 +1,3 @@
-.skeletonTicket {
-    .ticketBody__heading {
-        background: linear-gradient(90deg, rgba(165,165,165,0.6702031154258579) 0%, rgba(230,230,230,1) 50%, rgba(165,165,165,1) 100%);
-        width: 95px;
-        height: 32px;
-        border-radius: 5px;
-        animation: skeletonBG 2s ease infinite;
-        background-size: 200% 200%;
-    }
-    .skeletonTicket__logo {
-        background: linear-gradient(90deg, rgba(165,165,165,0.6702031154258579) 0%, rgba(230,230,230,1) 50%, rgba(165,165,165,1) 100%);
-        width: 100px;
-        margin-top: 10px;
-        height: 40px;
-        border-radius: 5px;
-        animation: skeletonBG 2s ease infinite;
-        background-size: 200% 200%;
-    }
-    .ticketBody__data {
-        background: linear-gradient(90deg, rgba(165,165,165,0.6702031154258579) 0%, rgba(230,230,230,1) 50%, rgba(165,165,165,1) 100%);
-        width: 462px;
-        height: 40px;
-        margin: 0 auto;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        animation: skeletonBG 2s ease infinite;
-        background-size: 200% 200%;
-    }
-}
-
 .main {
     margin: 0 auto;
     max-width: 755px;
@@ -154,6 +124,12 @@
     text-align: center;
     text-transform: uppercase;
     margin-bottom: 28px;
+}
+
+.erroredWindow {
+    width: fit-content;
+    margin: 0 auto;
+    margin-top: 10px;
 }
 
 @keyframes skeletonBG {

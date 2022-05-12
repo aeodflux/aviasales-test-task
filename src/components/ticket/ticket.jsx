@@ -5,7 +5,7 @@ import aeroflotLogo from "../../img/aeroflotLogo.svg";
 import utairLogo from "../../img/utairLogo.svg";
 import "./ticket.scss"
 
-export const Ticket = class Ticket extends React.Component {
+export class Ticket extends React.Component {
     defineTime = (index) => {
         let result = '';
         if (((this.props.value.segments[index].duration)/60 !== 0)) {
@@ -24,12 +24,13 @@ export const Ticket = class Ticket extends React.Component {
         return (String(this.props.value.segments[index].origin) + '-' + String(this.props.value.segments[index].destination))
     }
     defineNumberOfTransfers = (index) => {
-        if (this.props.value.segments[index].stops.length === 0) {
+        const stopsLength = this.props.value.segments[index].stops.length;
+        if (stopsLength === 0) {
             return ("Без пересадок");
-        } else if (this.props.value.segments[index].stops.length === 1) {
-            return (this.props.value.segments[index].stops.length + " пересадка");
+        } else if (stopsLength === 1) {
+            return `${stopsLength} пересадка`; // Везде так делать впредь
         } else {
-            return (this.props.value.segments[index].stops.length +" пересадки")
+            return (stopsLength +" пересадки")
         }
     }
     defineTransfersNames = (index) => {

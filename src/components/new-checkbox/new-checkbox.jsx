@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import "./new-checkbox.scss";
 
-export const NewCheckbox = class NewCheckbox extends React.Component {
+export class NewCheckbox extends React.Component {
     render() {
         return(
             <label className={classNames("filterPanel__checkbox", this.props.checked?"filterPanel__checkbox-checked":"filterPanel__checkbox")} >
