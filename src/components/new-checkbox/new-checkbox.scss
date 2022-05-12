@@ -37,9 +37,8 @@
         &-checked {
             outline: none;
         }
-        &:focus {
-            outline: #2196F3 2px solid;
-            outline-offset: -3px;
+        &:focus-within {
+            background-color: #F1FCFF;
         }
         &:hover {
             background-color: #F1FCFF;

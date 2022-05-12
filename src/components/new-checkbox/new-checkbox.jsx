@@ -5,7 +5,7 @@ import "./new-checkbox.scss";
 export class NewCheckbox extends React.Component {
     render() {
         return(
-            <label className={classNames("filterPanel__checkbox", this.props.checked?"filterPanel__checkbox-checked":"filterPanel__checkbox")} >
+            <label className={classNames("filterPanel__checkbox", this.props.checked?"filterPanel__checkbox-checked":"filterPanel__checkbox")}>
                 <input className='filterPanel__input' 
                     type="checkbox" 
                     id={this.props.id} 
