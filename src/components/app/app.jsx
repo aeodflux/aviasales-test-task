@@ -12,6 +12,7 @@ export const App = class App extends React.Component {
         super(props);
         this.state = {
             data: [],
+            tickets: [],
             showMoreBtnIsHidden: false,
             loading: false,
             pageControllerValue: 0,
@@ -20,30 +21,35 @@ export const App = class App extends React.Component {
         };
     }
 
+    getTickets = () => {
+        this.setState({tickets: this.sortTickets()})
+    }
+
     handlingCheckboxChange = (e) => {
         const value = e.target.value;
         const nextChecked = e.target.checked;
         if (value === "allChecked") {
             if (nextChecked) {
-                this.setState({transfersFilter: [0, 1, 2, 3]})
+                this.setState({transfersFilter: [0, 1, 2, 3]}, () => {return this.getTickets()})
             } else {
-                this.setState({transfersFilter: []})
+                this.setState({transfersFilter: []}, () => {return this.getTickets()})
             }
         } else {
             if (nextChecked) {
-                this.setState({transfersFilter: this.state.transfersFilter.concat(Number(value))})
+                this.setState({transfersFilter: this.state.transfersFilter.concat(Number(value))}, () => {return this.getTickets()})
             } else {
-                this.setState({transfersFilter: this.state.transfersFilter.filter((el) => el !== Number(value))})
+                this.setState({transfersFilter: this.state.transfersFilter
+                .filter((el) => el !== Number(value))}, () => {return this.getTickets()})
             }
         }
     }
 
     onOnlyChange = (name) => {
-        this.setState({transfersFilter: [name]})
+        this.setState({transfersFilter: [name]}, () => {return this.getTickets()})
     }
 
     handlingRadioChange = (e) => {
-        this.setState({ pageControllerValue: e.target.value });
+        this.setState({ pageControllerValue: e.target.value }, () => {return this.getTickets()});
     }
 
     componentDidMount = () => {
@@ -58,10 +64,10 @@ export const App = class App extends React.Component {
         } else {
             const json = await response.json();
             this.setState({
-            data: [...this.state.data, json],
+            data: [...this.state.data, json.tickets].flat(),
             showMoreBtnIsHidden: json.stop,
-            loading: false
-        });
+            loading: false,
+            }, () => {return this.getTickets()});
         }
     }
 
@@ -74,29 +80,28 @@ export const App = class App extends React.Component {
             return this.state.transfersFilter.includes(pathFromStops) && this.state.transfersFilter.includes(pathToStops)
         }
     }
-
+    
     sortTickets = () => {
-        return this.state.data
-            .map(response => response.tickets
-                .filter(n => this.transferFiltering(n))
-                .sort((a, b) => {
-                    if (this.state.pageControllerValue === 'cheapest') {
-                        return compareCheapest(a, b)
-                    } else if (this.state.pageControllerValue === 'fastest') {
-                        return compareFastest(a, b)
-                    } else if (this.state.pageControllerValue === 'optimal') {
-                        return compareOptimal(a, b)
-                    } else {
-                        return (a === b)
-                    }
-                })
-            )
+        let result = [];
+        result = this.state.data.filter(n => this.transferFiltering(n))
+            .sort((a, b) => {
+                if (this.state.pageControllerValue === 'cheapest') {
+                    return compareCheapest(a, b)
+                } else if (this.state.pageControllerValue === 'fastest') {
+                    return compareFastest(a, b)
+                } else if (this.state.pageControllerValue === 'optimal') {
+                    return compareOptimal(a, b)
+                } else {
+                    return (a === b)
+                }
+            }
+        )
+        return result;
     }
 
     render() {
         let filteredSortedTickets = [];
-        if (!this.state.newError) {filteredSortedTickets = this.sortTickets()
-            .flat()
+        if (!this.state.newError) {filteredSortedTickets = this.state.tickets
             .map((ticket, index) => <Ticket key={index} value={ticket} />)}
         return (
             (this.state.newError) ? 
