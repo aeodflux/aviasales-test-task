@@ -1,8 +1,8 @@
 import React from 'react';
 import cn from 'classnames';
-import "./page-switch.scss";
+import "./switch.scss";
 
-export class PageSwitch extends React.Component {
+export class Switch extends React.Component {
     render() {
         return(
             <label className={cn('pageSwitch__container', this.props.checked && 'pageSwitch__container-checked')}>

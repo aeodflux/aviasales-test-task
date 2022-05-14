@@ -24,8 +24,7 @@
 .pageController {
     display: flex;
     justify-content: space-around;
-    width: 505px;
-    margin-left: 20px;
+    width: 502px;
     font-family: 'Open Sans', sans-serif;
     font-style: normal;
     font-weight: 600;
@@ -36,6 +35,7 @@
     letter-spacing: 0.5px;
     text-transform: uppercase;
     height: 50px;
+    margin: 0 auto;
     &__switch {
         width: 100%;
         background-color: #fff;
@@ -49,16 +49,11 @@
     }
 }
 
-.biletsPanel {
-    grid-column: 2/2;
-    grid-row: 1/1;
-    height: fit-content;
-}
-
 .ticketsPanel {
     grid-column: 2/2;
     grid-row: 2/2;
     margin: 20px;
+    width: 502px;
 }
 
 .moreResultsButton {
@@ -78,7 +73,12 @@
     color: #FFFFFF;
     border: none;
     cursor: pointer;
+    margin: 0 auto;
+    display: block;
     margin-bottom: 40px;
+    &--errored {
+        width: 335px;
+    }
     &:hover {
         background-color: rgb(24, 122, 203);
         transition: background-color 0.2s;
@@ -123,13 +123,13 @@
     align-items: center;
     text-align: center;
     text-transform: uppercase;
-    margin-bottom: 28px;
+    width: fit-content;
+    margin: 48px auto;
 }
 
 .erroredWindow {
     width: fit-content;
-    margin: 0 auto;
-    margin-top: 10px;
+    margin: 55px auto;
 }
 
 @keyframes skeletonBG {

@@ -1,5 +1,5 @@
 import React from 'react';
-import classNames from 'classnames';
+import cn from 'classnames';
 import s7Logo from "../../img/s7logo.svg";
 import aeroflotLogo from "../../img/aeroflotLogo.svg";
 import utairLogo from "../../img/utairLogo.svg";
@@ -68,7 +68,7 @@ export class Ticket extends React.Component {
                         <h2 className='ticketBody__dataTime'>{this.defineTime(0)}</h2>
                     </div>
                     <div className='ticketBody__dataBlock'>
-                        <h2 className={classNames('ticketBody__dataHeading', (this.props.value.segments[0].stops.length === 0)&&"dataHeading")}>
+                        <h2 className={cn('ticketBody__dataHeading', (this.props.value.segments[0].stops.length === 0)&&"dataHeading")}>
                             {this.defineNumberOfTransfers(0)}
                         </h2>
                         <h2 className='ticketBody__dataTime'>{this.defineTransfersNames(0)}</h2>
@@ -84,13 +84,13 @@ export class Ticket extends React.Component {
                         <h2 className='ticketBody__dataTime'>{this.defineTime(1)}</h2>
                     </div>
                     <div className='ticketBody__dataBlock'>
-                        <h2 className={classNames('ticketBody__dataHeading', (this.props.value.segments[1].stops.length === 0)&&"dataHeading")}>
+                        <h2 className={cn('ticketBody__dataHeading', (this.props.value.segments[1].stops.length === 0)&&"dataHeading")}>
                             {this.defineNumberOfTransfers(1)}
                         </h2>
                         <h2 className='ticketBody__dataTime'>{this.defineTransfersNames(1)}</h2>
                     </div>
                 </div>
-            </a>
+            </a> 
         )
     }
 }

@@ -16,5 +16,5 @@ new Server({
         }
     }, { timing: 1000 });
     // this.get("/users/", () => {
-    //     return new Response(404, { errors: [ 'server error'] });
+    //     return new Response(404, { errors: [ 'server error'] })});
 }});
