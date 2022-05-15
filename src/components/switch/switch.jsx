@@ -5,10 +5,10 @@ import "./switch.scss";
 export class Switch extends React.Component {
     render() {
         return(
-            <label className={cn('pageSwitch__container', this.props.checked && 'pageSwitch__container-checked')}>
-                <h2 className='pageSwitch__heading'>{this.props.label}</h2>
-                <div className='pageSwitch__content'></div>
-                <input className='pageSwitch__radio' 
+            <label className={cn('switch-panel__container', this.props.checked && 'switch-panel__container--checked')}>
+                <h2 className='switch-panel__heading'>{this.props.label}</h2>
+                <div className='switch-panel__content'></div>
+                <input className='switch-panel__radio' 
                     type="radio" 
                     name={this.props.name} 
                     checked={this.props.checked} 

@@ -13,9 +13,9 @@ const newDate = (n) => {
 }
 
 const newStops = (origin, dest) => {
-    let array = [];
-    for ( let i=0; i < Math.floor(Math.random() * 4); i++) {
-        let pushing = (aviaCodes[Math.floor(Math.random() * 10)]);
+    const array = [];
+    for ( let i = 0; i < Math.floor(Math.random() * 4); i++) {
+        const pushing = (aviaCodes[Math.floor(Math.random() * 10)]);
         if (!array.find(elem => elem === pushing) && (origin !== pushing) && (dest !== pushing)) {
             array.push(pushing);
         }
@@ -57,12 +57,12 @@ export const ticketsGeneration = (count, stopped) => {
             ]
         })
     }
-    let response = {
-        tickets: []
+    const response = {
+        tickets: [],
+        stop: stopped
     };
     for (let i = 0; i < count; i++) {
         response.tickets.push(newTicket());
     }
-    response["stop"] = stopped;
     return response;
 }

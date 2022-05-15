@@ -1,4 +1,4 @@
-.filterPanel {
+.filter-panel {
     background: #FFFFFF;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
@@ -42,7 +42,7 @@
         }
         &:hover {
             background-color: #F1FCFF;
-            .checkbox__onlyFilterButton {
+            .filter-panel__only-filter-button {
                 display: block;
                 opacity: 100%;
                 transition: opacity 0.5s;
@@ -105,14 +105,12 @@
             background-repeat: no-repeat;
         }
     }
+    &__only-filter-button {
+        display: block;
+        opacity: 0;
+    }
 }
 
-.checkbox__onlyFilterButton {
-    display: block;
-    opacity: 0;
-    order: 2;
-}
-
-.filterPanel__input:checked + .filterPanel__content::before {
+.filter-panel__input:checked + .filter-panel__content::before {
     background-image: url('../../img/shape.svg');
 }

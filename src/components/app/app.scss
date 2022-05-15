@@ -7,8 +7,10 @@
     display: block;
     width: 80px;
     height: 80px;
-    margin: 25px auto;
     &__href {
+        display: block;
+        margin: 25px auto;
+        width: fit-content;
         &:focus {
             outline-color: #2196F3;
         }
@@ -21,42 +23,14 @@
     grid-template-rows: auto auto;
 }
 
-.pageController {
-    display: flex;
-    justify-content: space-around;
-    width: 502px;
-    font-family: 'Open Sans', sans-serif;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 20px;
-    align-items: center;
-    text-align: center;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    height: 50px;
-    margin: 0 auto;
-    &__switch {
-        width: 100%;
-        background-color: #fff;
-        padding: 15px;
-        &-on {
-            width: 100%;
-            background: #2196F3;
-            padding: 15px;
-            color: #FFFFFF;
-        }
-    }
-}
-
-.ticketsPanel {
+.tickets-panel {
     grid-column: 2/2;
     grid-row: 2/2;
     margin: 20px;
     width: 502px;
 }
 
-.moreResultsButton {
+.more-results-button {
     width: 100%;
     background: #2196F3;
     border-radius: 5px;
@@ -92,29 +66,15 @@
     }
 }
 
-.logoUtair {
+.logo-utair {
     position: absolute;
     left: 70%;
     margin-top: 10px;
     width: 100px;
 }
 
-.dataBlock {
-    &__time {
-        width: 100px;
-    }
-    &__path {
-        width: 65px;
-    }
-}
 
-.dataHeading {
-    margin-top: 5px;
-    position: absolute;
-    width: 105px;
-}
-
-.strictFiltersWarning {
+.strict-filters-warning {
     font-family: 'Open Sans';
     font-style: normal;
     font-weight: 600;
@@ -127,19 +87,7 @@
     margin: 48px auto;
 }
 
-.erroredWindow {
+.errored-window {
     width: fit-content;
     margin: 55px auto;
-}
-
-@keyframes skeletonBG {
-    0% {
-        background-position: 0 0%;
-    }
-    50% {
-        background-position: 100% 100%;
-    }
-    100% {
-        background-position: 0 0%;
-    }
 }

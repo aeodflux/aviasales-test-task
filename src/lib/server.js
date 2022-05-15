@@ -1,8 +1,7 @@
 import { Server } from "miragejs";
 import { ticketsGeneration } from "./tickets-generation";
 // import { Response } from 'miragejs';
-
-let randomResponse = Math.floor(Math.random() * 3 + 2);
+const randomResponse = Math.floor(Math.random() * 3 + 2);
 let responceCount = 0;
 new Server({
   routes() {

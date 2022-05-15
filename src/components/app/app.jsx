@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import { SwitchPanel } from '../switchPanel/switchPanel';
-import { Checkbox } from '../checkbox/checkbox';
 import { CheckboxPanel } from '../checkboxPanel/checkboxPanel';
 import { Ticket } from '../ticket/ticket';
 import logoImg from '../../img/logo.svg';
@@ -105,9 +104,9 @@ export class App extends React.Component {
                     <img className='logo' src={logoImg} alt='logo' width='60px' height='60px' />
                 </a>
                 <div className='content'>
-                    <div className='filterPanel'>
-                        <h2 className='filterPanel__heading'>Количество пересадок</h2>
-                        <div className="filterPanel__container">
+                    <div className='filter-panel'>
+                        <h2 className='filter-panel__heading'>Количество пересадок</h2>
+                        <div className="filter-panel__container">
                             <CheckboxPanel 
                                 onChange={this.handlingCheckboxChange} 
                                 onFilter={this.onOnlyChange} 
@@ -115,24 +114,22 @@ export class App extends React.Component {
                             />
                         </div>
                     </div>
-                    <div className="pageController">
                         <SwitchPanel 
                             onChange={this.handlingRadioChange} 
                             value={this.state.pageControllerValue}
                         />
-                    </div>
                     {this.state.newError ? (
                         <div>
-                            <div className='erroredWindow'>Что-то пошло не так ({this.state.newError.headers.map.errors})</div>
-                            <button type='button' className='moreResultsButton moreResultsButton--errored' onClick={this.fetchMoreTickets}>
+                            <div className='errored-window'>Что-то пошло не так ({this.state.newError.headers.map.errors})</div>
+                            <button type='button' className='more-results-button more-results-button--errored' onClick={this.fetchMoreTickets}>
                                 Повторить попытку
                             </button>
                         </div>
                     ) : (
-                        <div className='ticketsPanel'>
-                            <div className='ticketsPanel__container'>
+                        <div className='tickets-panel'>
+                            <div className='tickets-panel__container'>
                                 {(!this.state.loading && this.state.tickets.length === 0) ? (
-                                    <h2 className='strictFiltersWarning'>
+                                    <h2 className='strict-filters-warning'>
                                         Не найдено результатов
                                     </h2>
                                 ) : this.state.tickets.map((ticket, index) => (
@@ -143,7 +140,7 @@ export class App extends React.Component {
                                 <SkeletonTicket count={7}/>
                             )}
                             {!this.state.showMoreBtnIsHidden && this.state.data && !this.state.loading && (
-                                <button type='button' className='moreResultsButton' onClick={this.fetchMoreTickets}>
+                                <button type='button' className='more-results-button' onClick={this.fetchMoreTickets}>
                                     Показать еще билеты
                                 </button>
                             )}

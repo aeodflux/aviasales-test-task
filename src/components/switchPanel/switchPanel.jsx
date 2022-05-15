@@ -7,20 +7,20 @@ export class SwitchPanel extends React.Component {
     }
     render() {
         return(
-            <div className="pageController">
-                <Switch name="radioBiletsPanel"
+            <div className="switch-panel">
+                <Switch name="radioTicketsPanel"
                     value='cheapest'
                     label="Самый дешевый"
                     checked={this.props.value === 'cheapest'}
                     onChange={this.props.onChange}
                 />
-                <Switch name="radioBiletsPanel"
+                <Switch name="radioTicketsPanel"
                     value='fastest'
                     label="Самый быстрый"
                     checked={this.props.value === 'fastest'}
                     onChange={this.props.onChange}
                 />
-                <Switch name="radioBiletsPanel"
+                <Switch name="radioTicketsPanel"
                     value='optimal'
                     label="Оптимальный"
                     checked={this.props.value === 'optimal'}
