@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/aviasales-test-task/static/css/main.dbc98fcd.css",
-    "main.js": "/aviasales-test-task/static/js/main.5117743a.js",
+    "main.css": "/aviasales-test-task/static/css/main.c1b86f7b.css",
+    "main.js": "/aviasales-test-task/static/js/main.572b2f11.js",
     "static/media/aeroflotLogo.svg": "/aviasales-test-task/static/media/aeroflotLogo.8c7dadd440ebbe354d0c31fe228ea734.svg",
     "static/media/logo.svg": "/aviasales-test-task/static/media/logo.3cb8dabd0effb639d7fb1ba0c61050fe.svg",
     "static/media/utairLogo.svg": "/aviasales-test-task/static/media/utairLogo.dbdf8d7fbda8fe781445d0a3a76c01c3.svg",
     "static/media/s7logo.svg": "/aviasales-test-task/static/media/s7logo.62e26141359d5723e81be9eb9ab0a63e.svg",
     "index.html": "/aviasales-test-task/index.html",
     "static/media/shape.svg": "/aviasales-test-task/static/media/shape.b3ce3c21e1b482d2d37a.svg",
-    "main.dbc98fcd.css.map": "/aviasales-test-task/static/css/main.dbc98fcd.css.map",
-    "main.5117743a.js.map": "/aviasales-test-task/static/js/main.5117743a.js.map"
+    "main.c1b86f7b.css.map": "/aviasales-test-task/static/css/main.c1b86f7b.css.map",
+    "main.572b2f11.js.map": "/aviasales-test-task/static/js/main.572b2f11.js.map"
   },
   "entrypoints": [
-    "static/css/main.dbc98fcd.css",
-    "static/js/main.5117743a.js"
+    "static/css/main.c1b86f7b.css",
+    "static/js/main.572b2f11.js"
   ]
 }
