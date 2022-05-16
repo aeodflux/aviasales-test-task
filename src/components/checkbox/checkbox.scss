@@ -34,7 +34,7 @@
         color: #4A4A4A;
         cursor: pointer;
         position: relative;
-        &-checked {
+        &--checked {
             outline: none;
         }
         &:focus-within {

@@ -1,19 +1,23 @@
 import { Server } from "miragejs";
 import { ticketsGeneration } from "./tickets-generation";
-// import { Response } from 'miragejs';
+import { Response } from 'miragejs';
+
 const randomResponse = Math.floor(Math.random() * 3 + 2);
-let responceCount = 0;
+let responseCount = 0;
+
 new Server({
   routes() {
     this.namespace = "api";
     this.get("/users/", () => {
-        responceCount ++;
-        if (randomResponse === responceCount) {
-            return ticketsGeneration(Math.floor(Math.random() * 7), true);
+        responseCount ++;
+        if (Math.random() <= 0.25) {
+            return new Response(404, { errors: [ 'Вероятность ошибки сервера - 25%'] })
         } else {
-            return ticketsGeneration(15, false);
+            if (randomResponse <= responseCount) {
+                return ticketsGeneration(Math.floor(Math.random() * 7), true);
+            } else {
+                return ticketsGeneration(15, false);
+            }
         }
     }, { timing: 1000 });
-    // this.get("/users/", () => {
-    //     return new Response(404, { errors: [ 'server error'] })});
 }});

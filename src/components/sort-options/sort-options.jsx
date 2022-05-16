@@ -1,10 +1,7 @@
 import React from 'react';
 import { Switch } from "../switch/switch";
 
-export class SwitchPanel extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+export class SortOptions extends React.Component {
     render() {
         return(
             <div className="switch-panel">

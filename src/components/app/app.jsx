@@ -1,11 +1,14 @@
-import React, { Fragment } from 'react';
-import { SwitchPanel } from '../switchPanel/switchPanel';
-import { CheckboxPanel } from '../checkboxPanel/checkboxPanel';
+import React from 'react';
+import { SortOptions} from '../sort-options/sort-options';
+import { TicketTransferFilters } from '../ticket-transfer-filters/ticket-transfer-filters';
 import { Ticket } from '../ticket/ticket';
+import { Button } from '../button/button';
 import logoImg from '../../img/logo.svg';
 import { compareFastest, compareOptimal, compareCheapest } from '../../lib/sorting';
 import "./app.scss";
 import { SkeletonTicket } from '../skeleton/skeleton';
+
+const DEFAULT_TRANSFERS = [0, 1, 2, 3];
 
 export class App extends React.Component {
     constructor(props) {
@@ -13,43 +16,48 @@ export class App extends React.Component {
         this.state = {
             data: [],
             tickets: [],
-            showMoreBtnIsHidden: false,
+            lastTicketsReceived: false,
             loading: false,
-            pageControllerValue: 0,
-            transfers: [0, 1, 2, 3],
-            newError: false,
+            sortTicketsBy: 'noSort',
+            chosenTicketTransfers: DEFAULT_TRANSFERS,
+            error: false,
         };
     }
 
-    getTickets = () => {
-        this.setState({tickets: this.sortTickets()})
+    updateRenderedTickets = () => {
+        this.setState({tickets: this.sortTickets(this.transferFiltering())})
     }
 
-    handlingCheckboxChange = (e) => {
+    handleCheckboxChange = (e) => {
         const value = e.target.value;
         const nextChecked = e.target.checked;
         if (value === "allChecked") {
             if (nextChecked) {
-                this.setState({transfers: [0, 1, 2, 3]}, () => {return this.getTickets()})
+                this.setState({ chosenTicketTransfers: DEFAULT_TRANSFERS }, () => this.updateRenderedTickets() )
             } else {
-                this.setState({transfers: []}, () => {return this.getTickets()})
+                this.setState({ chosenTicketTransfers: [] }, () => this.updateRenderedTickets() )
             }
         } else {
             if (nextChecked) {
-                this.setState({transfers: this.state.transfers.concat(Number(value))}, () => {return this.getTickets()})
+                this.setState({
+                    chosenTicketTransfers: this.state.chosenTicketTransfers
+                        .concat(Number(value))
+                }, () => this.updateRenderedTickets())
             } else {
-                this.setState({transfers: this.state.transfers
-                .filter((el) => el !== Number(value))}, () => {return this.getTickets()})
+                this.setState({
+                    chosenTicketTransfers: this.state.chosenTicketTransfers
+                        .filter((el) => el !== Number(value))
+                }, () => this.updateRenderedTickets())
             }
         }
     }
 
     onOnlyChange = (name) => {
-        this.setState({transfers: [name]}, () => {return this.getTickets()})
+        this.setState({ chosenTicketTransfers: [name]}, () => this.updateRenderedTickets())
     }
 
-    handlingRadioChange = (e) => {
-        this.setState({ pageControllerValue: e.target.value }, () => {return this.getTickets()});
+    handleRadioChange = (e) => {
+        this.setState({ sortTicketsBy: e.target.value }, () => this.updateRenderedTickets());
     }
 
     componentDidMount = () => {
@@ -60,42 +68,44 @@ export class App extends React.Component {
         this.setState({ loading: true });
         const response = await fetch("/api/users/");
         if (!response.ok) {
-            return this.setState({newError: response, loading: false, showMoreBtnIsHidden: true});
+            return this.setState({
+                error: response,
+                loading: false, 
+            });
         } else {
             const json = await response.json();
             this.setState({
-            data: [...this.state.data, json.tickets].flat(),
-            showMoreBtnIsHidden: json.stop,
-            loading: false,
-            }, () => {return this.getTickets()});
+                data: [...this.state.data, json.tickets].flat(),
+                lastTicketsReceived: json.stop,
+                loading: false,
+                error: false,
+            }, () => this.updateRenderedTickets());
         }
     }
 
-    transferFiltering = (ticket) => {
-        const pathFromStops = ticket.segments[0].stops.length;
-        const pathToStops = ticket.segments[1].stops.length;
-        if (this.state.transfers.length === 0) {
-            return true;
-        } else {
-            return this.state.transfers.includes(pathFromStops) && this.state.transfers.includes(pathToStops)
-        }
-    }
-    
-    sortTickets = () => {
-        return this.state.data.filter(n => this.transferFiltering(n))
-            .sort((a, b) => {
-                if (this.state.pageControllerValue === 'cheapest') {
-                    return compareCheapest(a, b)
-                } else if (this.state.pageControllerValue === 'fastest') {
-                    return compareFastest(a, b)
-                } else if (this.state.pageControllerValue === 'optimal') {
-                    return compareOptimal(a, b)
-                } else {
-                    return (a === b)
-                }
+    transferFiltering = () => {
+        return this.state.data.filter((ticket) => {
+            const pathFromStops = ticket.segments[0].stops.length;
+            const pathToStops = ticket.segments[1].stops.length;
+            const chosenTranfers = this.state.chosenTicketTransfers;
+            if (chosenTranfers.length === 0) {
+                return true;
+            } else {
+                return (
+                    chosenTranfers.includes(pathFromStops) && chosenTranfers.includes(pathToStops)
+                )
             }
-        )
+        })
     }
+
+    sortMethods = {
+        cheapest: compareCheapest,
+        fastest: compareFastest,
+        optimal: compareOptimal,
+        noSort: () => 0,
+    }
+
+    sortTickets = (rawTickets) => rawTickets.sort(this.sortMethods[this.state.sortTicketsBy])
 
     render() {
         return (
@@ -105,47 +115,51 @@ export class App extends React.Component {
                 </a>
                 <div className='content'>
                     <div className='filter-panel'>
-                        <h2 className='filter-panel__heading'>Количество пересадок</h2>
+                        <h2 className='filter-panel__heading'>
+                            Количество пересадок
+                        </h2>
                         <div className="filter-panel__container">
-                            <CheckboxPanel 
-                                onChange={this.handlingCheckboxChange} 
+                            <TicketTransferFilters 
+                                onChange={this.handleCheckboxChange} 
                                 onFilter={this.onOnlyChange} 
-                                transfers={this.state.transfers}
+                                transfers={this.state.chosenTicketTransfers}
                             />
                         </div>
                     </div>
-                        <SwitchPanel 
-                            onChange={this.handlingRadioChange} 
-                            value={this.state.pageControllerValue}
-                        />
-                    {this.state.newError ? (
-                        <div>
-                            <div className='errored-window'>Что-то пошло не так ({this.state.newError.headers.map.errors})</div>
-                            <button type='button' className='more-results-button more-results-button--errored' onClick={this.fetchMoreTickets}>
-                                Повторить попытку
-                            </button>
+                    <SortOptions
+                        onChange={this.handleRadioChange} 
+                        value={this.state.sortTicketsBy}
+                    />
+                    <div className='tickets-panel'>
+                        <div className='tickets-panel__container'>
+                            {(!this.state.loading && this.state.tickets.length === 0 && !this.state.error) ? (
+                                <h2 className='strict-filters-warning'>
+                                    Не найдено результатов
+                                </h2>
+                            ) : this.state.tickets.map((ticket, index) => (
+                                <Ticket key={index} value={ticket} />
+                            ))}
                         </div>
-                    ) : (
-                        <div className='tickets-panel'>
-                            <div className='tickets-panel__container'>
-                                {(!this.state.loading && this.state.tickets.length === 0) ? (
-                                    <h2 className='strict-filters-warning'>
-                                        Не найдено результатов
-                                    </h2>
-                                ) : this.state.tickets.map((ticket, index) => (
-                                    <Ticket key={index} value={ticket} />
-                                ))}
+                        {this.state.loading && (
+                            <SkeletonTicket count={7}/>
+                        )}
+                        {!this.state.lastTicketsReceived
+                            && this.state.data 
+                            && !this.state.loading
+                            && !this.state.error && (
+                            <Button onClick={this.fetchMoreTickets}>
+                                Показать еще билеты
+                            </Button>
+                        )}
+                        {this.state.error && !this.state.loading && (
+                            <div>
+                                <div className='errored-window'>Что-то пошло не так ({this.state.error.headers.map.errors})</div>
+                                <Button variant="error" onClick={this.fetchMoreTickets}>
+                                    Повторить попытку
+                                </Button>
                             </div>
-                            {this.state.loading && (
-                                <SkeletonTicket count={7}/>
-                            )}
-                            {!this.state.showMoreBtnIsHidden && this.state.data && !this.state.loading && (
-                                <button type='button' className='more-results-button' onClick={this.fetchMoreTickets}>
-                                    Показать еще билеты
-                                </button>
-                            )}
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
             </div>
         )

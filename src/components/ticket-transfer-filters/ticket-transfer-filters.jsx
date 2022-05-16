@@ -1,10 +1,7 @@
 import React from 'react';
 import { Checkbox } from '../checkbox/checkbox';
 
-export class CheckboxPanel extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+export class TicketTransferFilters extends React.Component {
     render() {
         return(
             <div>

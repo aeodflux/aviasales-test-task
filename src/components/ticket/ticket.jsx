@@ -7,13 +7,13 @@ import "./ticket.scss"
 export class Ticket extends React.Component {
     defineTime = (index) => {
         let result = '';
-        if (((this.props.value.segments[index].duration)/60 !== 0)) {
-            result += (Math.floor((this.props.value.segments[index].duration)/60) + "ч ");
+        if (((this.props.value.segments[index].duration) / 60 !== 0)) {
+            result += (Math.floor((this.props.value.segments[index].duration) / 60) + "ч ");
         } else {
             result += "";
         }
-        if ((this.props.value.segments[index].duration)%60 !== 0) {
-            result += (Math.floor(((this.props.value.segments[index].duration)%60)) + "м")
+        if ((this.props.value.segments[index].duration) % 60 !== 0) {
+            result += (Math.floor(((this.props.value.segments[index].duration) % 60)) + "м")
         } else {
             result += "";
         }
@@ -33,29 +33,29 @@ export class Ticket extends React.Component {
         }
     }
     defineTransfersNames = (index) => {
-        return (this.props.value.segments[index].stops.map((elem, indx, arr) => {
+        return this.props.value.segments[index].stops.map((elem, indx, arr) => {
             if (indx === arr.length - 1) {
                 return elem;
             } else {
                 return elem + ", "
             }
-        }))
+        })
     }
     defineLogo = () => {
-        if (this.props.value.carriers==="S7") {
+        if (this.props.value.carriers === "S7") {
             return s7Logo;
-        } else if (this.props.value.carriers==="Aeroflot") {
+        } else if (this.props.value.carriers === "Aeroflot") {
             return aeroflotLogo;
         } else {
             return utairLogo;
         }
     }
     render() {
-        return(
+        return (
             <a className='ticket-body' href="https://www.aviasales.ru/">
                 <div className='ticket-body__heading-container'>
                     <h2 className='ticket-body__heading'>{this.props.value.price} Р</h2>
-                    <img src={this.defineLogo()} alt="logo" width="150px" height="60px" className={this.props.value.carriers === "Utair"?"logo-utair":"simpleLogo"}/>
+                    <img src={this.defineLogo()} alt="logo" width="150px" height="60px" className={this.props.value.carriers === "Utair" ? "logo-utair" : "simpleLogo"} />
                 </div>
                 <div className='ticket-body__data'>
                     <div className='data-block data-block__time'>
@@ -89,7 +89,7 @@ export class Ticket extends React.Component {
                         <h2 className='data-block__date'>{this.defineTransfersNames(1)}</h2>
                     </div>
                 </div>
-            </a> 
+            </a>
         )
     }
 }
