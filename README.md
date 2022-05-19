@@ -16,6 +16,8 @@ This task was taken from the Hexlet repository. It was made just for React / Jav
 
 *Package management:* NPM
 
+*Mocking library:* MirageJs
+
 ## Figma Template
 
 [Aviasales Figma Template](https://www.figma.com/file/clycQflirusfWgi6nIfgV9/Aviasales-Test-Task)
