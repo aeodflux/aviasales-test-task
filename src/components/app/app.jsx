@@ -1,5 +1,5 @@
 import React from 'react';
-import { SortOptions} from '../sort-options/sort-options';
+import { SortOptions } from '../sort-options/sort-options';
 import { TicketTransferFilters } from '../ticket-transfer-filters/ticket-transfer-filters';
 import { Ticket } from '../ticket/ticket';
 import { Button } from '../button/button';
@@ -25,7 +25,7 @@ export class App extends React.Component {
     }
 
     updateRenderedTickets = () => {
-        this.setState({tickets: this.sortTickets(this.transferFiltering())})
+        this.setState({ tickets: this.sortTickets(this.transferFiltering()) })
     }
 
     handleCheckboxChange = (e) => {
@@ -33,35 +33,46 @@ export class App extends React.Component {
         const nextChecked = e.target.checked;
         if (value === "allChecked") {
             if (nextChecked) {
-                this.setState({ chosenTicketTransfers: DEFAULT_TRANSFERS }, () => this.updateRenderedTickets() )
+                this.setState({ chosenTicketTransfers: DEFAULT_TRANSFERS })
             } else {
-                this.setState({ chosenTicketTransfers: [] }, () => this.updateRenderedTickets() )
+                this.setState({ chosenTicketTransfers: [] })
             }
         } else {
             if (nextChecked) {
                 this.setState({
                     chosenTicketTransfers: this.state.chosenTicketTransfers
                         .concat(Number(value))
-                }, () => this.updateRenderedTickets())
+                })
             } else {
                 this.setState({
                     chosenTicketTransfers: this.state.chosenTicketTransfers
                         .filter((el) => el !== Number(value))
-                }, () => this.updateRenderedTickets())
+                })
             }
         }
     }
 
     onOnlyChange = (name) => {
-        this.setState({ chosenTicketTransfers: [name]}, () => this.updateRenderedTickets())
+        this.setState({ chosenTicketTransfers: [name] })
     }
 
     handleRadioChange = (e) => {
-        this.setState({ sortTicketsBy: e.target.value }, () => this.updateRenderedTickets());
+        this.setState({ sortTicketsBy: e.target.value });
     }
 
     componentDidMount = () => {
         this.fetchMoreTickets();
+    }
+
+    componentDidUpdate(_, prevState) {
+        const { chosenTicketTransfers, sortTicketsBy, data, lastTicketsReceived, loading } = this.state;
+        if (chosenTicketTransfers !== prevState.chosenTicketTransfers ||
+            sortTicketsBy !== prevState.sortTicketsBy ||
+            data !== prevState.data ||
+            lastTicketsReceived !== prevState.lastTicketsReceived ||
+            loading !== prevState.loading) {
+            this.updateRenderedTickets();
+        }
     }
 
     fetchMoreTickets = async () => {
@@ -70,7 +81,7 @@ export class App extends React.Component {
         if (!response.ok) {
             return this.setState({
                 error: response,
-                loading: false, 
+                loading: false,
             });
         } else {
             const json = await response.json();
@@ -79,7 +90,7 @@ export class App extends React.Component {
                 lastTicketsReceived: json.stop,
                 loading: false,
                 error: false,
-            }, () => this.updateRenderedTickets());
+            });
         }
     }
 
@@ -119,15 +130,15 @@ export class App extends React.Component {
                             Количество пересадок
                         </h2>
                         <div className="filter-panel__container">
-                            <TicketTransferFilters 
-                                onChange={this.handleCheckboxChange} 
-                                onFilter={this.onOnlyChange} 
+                            <TicketTransferFilters
+                                onChange={this.handleCheckboxChange}
+                                onFilter={this.onOnlyChange}
                                 transfers={this.state.chosenTicketTransfers}
                             />
                         </div>
                     </div>
                     <SortOptions
-                        onChange={this.handleRadioChange} 
+                        onChange={this.handleRadioChange}
                         value={this.state.sortTicketsBy}
                     />
                     <div className='tickets-panel'>
@@ -141,16 +152,16 @@ export class App extends React.Component {
                             ))}
                         </div>
                         {this.state.loading && (
-                            <SkeletonTicket count={7}/>
+                            <SkeletonTicket count={7} />
                         )}
                         {!this.state.lastTicketsReceived
-                            && this.state.data 
+                            && this.state.data
                             && !this.state.loading
                             && !this.state.error && (
-                            <Button onClick={this.fetchMoreTickets}>
-                                Показать еще билеты
-                            </Button>
-                        )}
+                                <Button onClick={this.fetchMoreTickets}>
+                                    Показать еще билеты
+                                </Button>
+                            )}
                         {this.state.error && !this.state.loading && (
                             <div>
                                 <div className='errored-window'>Что-то пошло не так ({this.state.error.headers.map.errors})</div>

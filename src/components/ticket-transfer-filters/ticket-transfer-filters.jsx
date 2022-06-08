@@ -3,12 +3,12 @@ import { Checkbox } from '../checkbox/checkbox';
 
 export class TicketTransferFilters extends React.Component {
     render() {
-        return(
+        return (
             <div>
                 <Checkbox id='checkboxFilterPanel1'
                     label="Все"
-                    checked={this.props.transfers.includes(0) && this.props.transfers.includes(1) && 
-                    this.props.transfers.includes(2) && this.props.transfers.includes(3)}
+                    checked={this.props.transfers.includes(0) && this.props.transfers.includes(1) &&
+                        this.props.transfers.includes(2) && this.props.transfers.includes(3)}
                     value="allChecked"
                     onChange={this.props.onChange}
                 />
