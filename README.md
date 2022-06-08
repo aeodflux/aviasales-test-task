@@ -4,7 +4,7 @@ This task was taken from the Hexlet repository. It was made just for React / Jav
 
 ## Demo 
 
-[Aviasales Test Task](https://silkesssji.github.io/aviasales-test-task/)
+[Live Demo](https://silkesssji.github.io/aviasales-test-task/)
 
 ## Tech stack
 
@@ -15,6 +15,8 @@ This task was taken from the Hexlet repository. It was made just for React / Jav
 *CSS preprocessor:* SCSS
 
 *Package management:* NPM
+
+*Mocking library:* MirageJs
 
 ## Figma Template
 
